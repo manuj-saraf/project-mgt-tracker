@@ -15,16 +15,21 @@ export class MemberService {
   private currentUserSubject = new BehaviorSubject<EmployeeUI | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+  }
 
   getMembers(): EmployeeUI[] {
-    return EmployeeMapper.convertEmployeeToUIModel(this.membersList.value)
+    return EmployeeMapper.convertEmployeeToUIModel(this.membersList.value);
+  }
+
+  getMembersCount(): number {
+    return this.membersList.value.length;
   }
 
   getMemberById(id: number): EmployeeUI | null {
     const member = this.membersList.value.find(member => member.id === id);
-    if(member){
-        return EmployeeMapper.convertEmployeeToUIModel([member])[0];
+    if (member) {
+      return EmployeeMapper.convertEmployeeToUIModel([member])[0];
     }
     return null;
   }

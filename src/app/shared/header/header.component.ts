@@ -4,70 +4,66 @@ import { Subscription } from 'rxjs';
 import { MemberService } from '../services/member.service';
 import { UserRoles } from '../@config/user-roles';
 import { EmployeeUI } from '../@models/employee-ui.model';
+import { allNavigationLinks } from '../../base/base.helper';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  standalone: false
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  isMenuOpen: boolean = false;
-  appName: string = 'Project Management Tracker';
-  currentUser: EmployeeUI | null = null;
-  private subscription: Subscription = new Subscription();
+    isMenuOpen: boolean = false;
+    appName: string = 'Project Management Tracker';
+    currentUser: EmployeeUI | null = null;
+    private subscription: Subscription = new Subscription();
 
-  private allNavigationLinks = [
-    { label: 'Add Member', route: '/home/add-member' },
-    { label: 'View Members', route: '/home/view-members' },
-    { label: 'Assign Task', route: '/home/assign-task' },
-    { label: 'View Task', route: '/home/view-task' },
-    { label: 'Allocation', route: '/home/allocation' }
-  ];
+    private navigationData = allNavigationLinks;
 
-  constructor(private router: Router, private memberService: MemberService) {}
 
-  ngOnInit(): void {
-    this.subscription.add(
-      this.memberService.currentUser$.subscribe(user => {
-        this.currentUser = user;
-      })
-    );
-  }
+    constructor(private router: Router, private memberService: MemberService) { }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  get navigationLinks() {
-    if (!this.currentUser) {
-      return [];
+    ngOnInit(): void {
+        this.subscription.add(
+            this.memberService.currentUser$.subscribe(user => {
+                this.currentUser = user;
+            })
+        );
     }
 
-    if (this.currentUser.role === UserRoles.Member) {
-      return this.allNavigationLinks.filter(link => link.label === 'View Task');
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
-    // For Manager and Architect, show all links
-    return this.allNavigationLinks;
-  }
+    get navigationLinks() {
+        if (!this.currentUser) {
+            return [];
+        }
 
-  navigate(route: string): void {
-    this.router.navigate([route]);
-    this.closeMenu();
-  }
+        if (this.currentUser.role === UserRoles.Member) {
+            return this.navigationData.filter(link => link.label === 'View Task');
+        }
 
-  logout(): void {
-    this.memberService.setCurrentUser(null);
-    this.router.navigate(['/']);
-    this.closeMenu();
-  }
+        // For Manager and Architect, show all links
+        return this.navigationData;
+    }
 
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
+    navigate(route: string): void {
+        this.router.navigate([route]);
+        this.closeMenu();
+    }
 
-  closeMenu(): void {
-    this.isMenuOpen = false;
-  }
+    logout(): void {
+        this.memberService.setCurrentUser(null);
+        this.router.navigate(['/']);
+        this.closeMenu();
+    }
+
+    toggleMenu(): void {
+        this.isMenuOpen = !this.isMenuOpen;
+    }
+
+    closeMenu(): void {
+        this.isMenuOpen = false;
+    }
 }

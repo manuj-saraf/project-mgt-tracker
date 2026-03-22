@@ -10,6 +10,6 @@ export interface Employee {
     skills: Skills[];
     profileDescription: string;
     currentProjectStartDate: string;
-    currentlProjectEndDate: string;
+    currentProjectEndDate: string;
     allocationPercentage: string;
 }
