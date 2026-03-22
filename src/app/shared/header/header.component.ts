@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MemberService } from '../services/member.service';
-import { Employee } from '../@models/employee.model';
 import { UserRoles } from '../@config/user-roles';
+import { EmployeeUI } from '../@models/employee-ui.model';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +14,7 @@ import { UserRoles } from '../@config/user-roles';
 export class HeaderComponent implements OnInit, OnDestroy {
   isMenuOpen: boolean = false;
   appName: string = 'Project Management Tracker';
-  currentUser: Employee | null = null;
+  currentUser: EmployeeUI | null = null;
   private subscription: Subscription = new Subscription();
 
   private allNavigationLinks = [
