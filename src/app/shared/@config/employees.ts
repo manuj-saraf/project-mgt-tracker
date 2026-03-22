@@ -1,4 +1,3 @@
-
 import { Employee } from "../@models/employee.model";
 import { Skills } from "./skills";
 import { UserRoles } from "./user-roles";
@@ -6,7 +5,7 @@ import { UserRoles } from "./user-roles";
 
 export const defaultEmployees: Employee[] = [
     {
-        id: 100001,
+        id: 100000,
         name: "John Doe",
         role: UserRoles.Architect,
         experience: 11.5,
@@ -17,7 +16,7 @@ export const defaultEmployees: Employee[] = [
         allocationPercentage:"1.00"
     },
     {
-        id: 100002,
+        id: 100001,
         name: "Jane Smith",
         role: UserRoles.Manager,
         experience: 9.0,

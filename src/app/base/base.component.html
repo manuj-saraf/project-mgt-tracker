@@ -1,3 +1,18 @@
+@if((alertService?.alert$ | async); as alertMessageData){
+  @if(alertMessageData.type === 'success') {
+  <div class="alert alert-success" role="alert">
+    <span >{{ alertMessageData.message }} </span>
+    <span (click)="alertService.hideAlert()" class="close">&times;</span>
+  </div>
+  }
+  @if(alertMessageData.type === 'error') {
+  <div class="alert alert-danger" role="alert">
+    <span >{{ alertMessageData.message }} </span>
+    <span (click)="alertService.hideAlert()" class="close">&times;</span>
+  </div>
+  }
+}
+
 <app-header></app-header>
 <div class="base-container" *ngIf="!hasChildRoute">
   <div class="welcome-section">

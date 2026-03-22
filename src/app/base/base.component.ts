@@ -5,6 +5,7 @@ import { MemberService } from '../shared/services/member.service';
 import { UserRoles } from '../shared/@config/user-roles';
 import { EmployeeUI } from '../shared/@models/employee-ui.model';
 import { allNavigationLinks } from './base.helper';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-base',
@@ -16,7 +17,7 @@ export class BaseComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private memberService = inject(MemberService);
-
+  alertService = inject(AlertService);
   private subscription = new Subscription();
   currentUser: EmployeeUI | null = null;
 

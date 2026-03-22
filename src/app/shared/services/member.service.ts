@@ -38,6 +38,7 @@ export class MemberService {
     if (!currentMembers.find(m => m.id === member.id)) {
         const employee = EmployeeMapper.convertUIModelToEmployee(member);
       this.membersList.next([...currentMembers, employee]);
+      console.log("Member added:",  this.membersList.value);
     }
   }
 
