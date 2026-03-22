@@ -5,11 +5,13 @@ import { SharedModule } from '../shared/shared.module';
 import { BaseComponent } from './base.component';
 import { BaseRoutingModule } from './base-routing.module';
 import { AddMemberComponent } from './@components/add-member/add-member.component';
+import { ViewMemberComponent } from './@components/view-member/view-member.component';
 
 @NgModule({
   declarations: [
     BaseComponent,
-    AddMemberComponent
+    AddMemberComponent,
+    ViewMemberComponent
   ],
   imports: [
     CommonModule,

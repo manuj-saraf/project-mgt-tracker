@@ -1,0 +1,59 @@
+.maxWid200{
+    width: 200px;
+    max-width: 200px;
+}
+.maxWid400{
+    width: 400px;
+    max-width: 400px;
+}
+
+.dataRow{
+    border-bottom: 1px solid #ddd;
+}
+
+.table-responsive{
+    overflow-x: auto;
+}
+
+table{
+    width:100%;
+    border-collapse: collapse;
+}
+
+th,td {
+    vertical-align: middle;
+    text-align: left;
+}
+
+th:nth-child(4), td:nth-child(4) {
+    max-width:200px;
+    width:200px;
+    overflow-x : auto;
+    white-space: nowrap;
+}
+
+th:nth-child(5), td:nth-child(5) {
+    max-width:400px;
+    width:400px;
+    overflow-x : auto;
+    white-space: normal;
+}
+
+@media (max-width: 768px) {
+    th, td{
+        font-size: 0.95rem;
+        padding: 0.4rem;
+    }
+
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5) {
+        max-width: 120px;
+        width: 120px;
+    }
+
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5) {
+        max-width: 180px;
+        width: 180px;
+    }
+}

@@ -1,1 +1,33 @@
-<p>view-member works!</p>
+<h1>Team Members</h1> 
+<div class="table-responsive ">
+  <table class="table table-bordered align-middle">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th class="maxWid200">Experience (years)</th>
+        <th class="maxWid200">Skills</th>
+        <th class="maxWid400">Profile Description</th>
+        <th>Profile Start</th>
+        <th>Profile End</th>
+        <th>Allocation %</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="dataRow" *ngFor="let member of pagedMembers">
+        <td>{{ member.name }}</td> 
+        <td>{{ member.role }}</td>
+        <td>{{ member.experience }}</td>
+        <td class="maxWid200" style="overflow-x:auto; white-space: break-spaces;">
+            <span *ngFor="let skill of member.skills; let last = last">
+                {{ skill }}<span *ngIf="!last">, </span>
+            </span>
+        </td>
+        <td class="maxWid400" style="overflow-x:auto; white-space: normal;">{{ member.profileDescription }}</td>
+        <td>{{ member.currentProjectStartDate }}</td>
+        <td>{{ member.currentProjectEndDate }}</td>
+        <td>{{ member.allocationPercentage }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
