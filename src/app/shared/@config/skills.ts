@@ -3,6 +3,7 @@ export enum Skills {
     React = 'React',
     Vue = 'Vue',
     Javascript = 'JavaScript',
+    Typescript = 'TypeScript',
     JSON = 'JSON',
     Java = 'Java',
     Python = 'Python',

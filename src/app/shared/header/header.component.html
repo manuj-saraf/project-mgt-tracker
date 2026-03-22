@@ -23,21 +23,18 @@
           href="javascript:void(0)">
           {{ link.label }}
         </a>
+        
+        <!-- Logout Link -->
+        <a 
+          *ngIf="currentUser"
+          class="nav-link logout-link"
+          (click)="logout()"
+          [title]="'Logout ' + currentUser.name"
+          href="javascript:void(0)">
+          Logout
+        </a>
       </nav>
 
-      <!-- Member Dropdown -->
-      <div class="member-dropdown">
-        <select 
-          class="member-select" 
-          [(ngModel)]="selectedMember"
-          (change)="onMemberSelected(selectedMember)"
-          aria-label="Select member">
-          <option value="" disabled selected>Select Member</option>
-          <option *ngFor="let member of members" [value]="member">
-            {{ member }}
-          </option>
-        </select>
-      </div>
     </div>
   </div>
 </header>

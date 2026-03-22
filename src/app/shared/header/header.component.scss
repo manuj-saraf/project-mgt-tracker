@@ -85,6 +85,10 @@
   }
 }
 
+.logout-link {
+  // No special styling - uses default nav-link styles
+}
+
 .member-dropdown {
   @media (max-width: 768px) {
     width: 100%;

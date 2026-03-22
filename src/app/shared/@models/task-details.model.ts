@@ -1,9 +1,14 @@
+import { TaskApprovalStatus } from "../@config/task-approval-status";
+import { Employee } from "./employee.model";
+import { TaskApproval } from "./task-approval.model";
+
 export interface TaskDetails{
     id: number;
     title: string;
     deliverables: string;
-    status: string;
-    assignedTo: string;
+    status: TaskApprovalStatus;
+    assignedTo: Employee['id'] | null;
     taskStartDate: string;
     taskEndDate: string;
+    approvalHistory:TaskApproval[] | null;
 }

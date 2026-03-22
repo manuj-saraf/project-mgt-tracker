@@ -1,43 +1,52 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { defaultEmployees } from '../@config/employees';
+import { Employee } from '../@models/employee.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
-  private dummyMembers: string[] = [
-    'John Doe',
-    'Jane Smith',
-    'Mike Johnson',
-    'Sarah Williams',
-    'Robert Brown',
-    'Emily Davis',
-    'David Wilson',
-    'Lisa Anderson'
-  ];
+  private membersList = new BehaviorSubject<Employee[]>([...defaultEmployees]);
+  public members$ = this.membersList.asObservable();
 
-  private membersSubject = new BehaviorSubject<string[]>(this.dummyMembers);
-  public members$ = this.membersSubject.asObservable();
+  private currentUserSubject = new BehaviorSubject<Employee | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {}
 
-  getMembers(): string[] {
-    return this.membersSubject.value;
+  getMembers(): Employee[] {
+    return this.membersList.value;
   }
 
-  addMember(member: string): void {
-    const currentMembers = this.membersSubject.value;
-    if (!currentMembers.includes(member)) {
-      this.membersSubject.next([...currentMembers, member]);
+  getMemberById(id: number): Employee | null {
+    return this.membersList.value.find(member => member.id === id) || null;
+  }
+  addMember(member: Employee): void {
+    const currentMembers = this.membersList.value;
+    if (!currentMembers.find(m => m.id === member.id)) {
+      this.membersList.next([...currentMembers, member]);
     }
   }
 
-  removeMember(member: string): void {
-    const currentMembers = this.membersSubject.value;
-    this.membersSubject.next(currentMembers.filter(m => m !== member));
+  removeMember(member: Employee): void {
+    const currentMembers = this.membersList.value;
+    this.membersList.next(currentMembers.filter(m => m.id !== member.id));
   }
 
-  updateMembers(members: string[]): void {
-    this.membersSubject.next(members);
+  updateMembers(members: Employee[]): void {
+    this.membersList.next(members);
+  }
+
+  setCurrentUser(user: Employee | null): void {
+    this.currentUserSubject.next(user);
+  }
+
+  getCurrentUser(): Employee | null {
+    return this.currentUserSubject.value;
+  }
+
+  getCurrentUserObservable(): Observable<Employee | null> {
+    return this.currentUser$;
   }
 }

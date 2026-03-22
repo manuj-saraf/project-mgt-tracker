@@ -27,6 +27,7 @@
           <span *ngIf="userId?.errors?.['required']">User ID is required</span>
           <span *ngIf="userId?.errors?.['pattern']">User ID must contain only numbers</span>
           <span *ngIf="userId?.errors?.['maxlength']">User ID cannot exceed 6 digits</span>
+          <span *ngIf="userId?.errors?.['invalidUserId']">User ID does not Exist</span>
         </div>
       </div>
 
