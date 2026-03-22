@@ -18,11 +18,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
 
   private allNavigationLinks = [
-    { label: 'Add Member', route: '/add-member' },
-    { label: 'View Members', route: '/view-members' },
-    { label: 'Assign Task', route: '/assign-task' },
-    { label: 'View Task', route: '/view-task' },
-    { label: 'Allocation', route: '/allocation' }
+    { label: 'Add Member', route: '/home/add-member' },
+    { label: 'View Members', route: '/home/view-members' },
+    { label: 'Assign Task', route: '/home/assign-task' },
+    { label: 'View Task', route: '/home/view-task' },
+    { label: 'Allocation', route: '/home/allocation' }
   ];
 
   constructor(private router: Router, private memberService: MemberService) {}

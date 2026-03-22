@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="base-container">
+<div class="base-container" *ngIf="!hasChildRoute">
   <div class="welcome-section">
     <h2>Welcome to Project Management Tracker</h2>
     <p>Manage your projects and team members efficiently</p>
@@ -23,3 +23,4 @@
     </div>
   </div>
 </div>
+<router-outlet></router-outlet>

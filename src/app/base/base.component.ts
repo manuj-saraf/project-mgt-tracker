@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-base',
@@ -6,4 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./base.component.scss'],
   standalone: false
 })
-export class BaseComponent {}
+export class BaseComponent {
+  private route = inject(ActivatedRoute);
+
+  get hasChildRoute(): boolean {
+    return this.route.children.length > 0;
+  }
+}
