@@ -19,7 +19,7 @@
       <input type="number" id="experience" formControlName="experience" min="0" max="40">
       <div *ngIf="addMemberForm.get('experience')?.invalid && addMemberForm.get('experience')?.touched" class="error">
         <div *ngIf="addMemberForm.get('experience')?.errors?.['required']">Experience is required.</div>
-        <div *ngIf="addMemberForm.get('experience')?.errors?.['min']">Experience must be at least 0.</div>
+        <div *ngIf="addMemberForm.get('experience')?.errors?.['min']">Experience must be at least 4 years to get added to team.</div>
         <div *ngIf="addMemberForm.get('experience')?.errors?.['max']">Experience cannot exceed 40 years.</div>
       </div>
     </div>

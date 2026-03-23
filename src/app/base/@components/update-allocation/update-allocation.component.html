@@ -8,7 +8,7 @@
                 <option value="{{ member.id }}">{{ member.name }}</option>
                 }
             </select>
-            <button type="button" (click)="onMemberSelect()" [disabled]="memberForm?.invalid || filteredMembers.length === 0">Select</button>
+            <button type="button" (click)="onMemberSelect()" [disabled]="memberForm.invalid || filteredMembers.length === 0">Select</button>
         </form>
         @if(filteredMembers.length === 0){
         <div class="error">

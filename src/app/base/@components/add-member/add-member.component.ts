@@ -36,7 +36,7 @@ private createForm() {
     id: [{ value: 100000 + this.memberService.getMembersCount(), disabled: true }],
     role: [{ value: UserRoles.Member, disabled: true }],
     name: ['', [Validators.required]],
-    experience: [0, [Validators.required, Validators.min(0), Validators.max(40)]],
+    experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
     skills: [[], [this.atLeastThreeSkillsValidator]],
     profileDescription: ['', [Validators.maxLength(1000)]],
     currentProjectStartDate: ['', [Validators.required]],

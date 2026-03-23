@@ -1,4 +1,4 @@
-@if((alertService?.alert$ | async); as alertMessageData){
+@if((alertService.alert$ | async); as alertMessageData){
   @if(alertMessageData.type === 'success') {
   <div class="alert alert-success" role="alert">
     <span >{{ alertMessageData.message }} </span>
