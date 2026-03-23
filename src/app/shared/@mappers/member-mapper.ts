@@ -5,7 +5,7 @@ const convertEmployeeToUIModel = (members: Employee[]): EmployeeUI[] => {
     return members.map(member => {
         return {
             ...member,
-            allocationPercentage: ((+member.allocationPercentage *1000)/100) as number
+            allocationPercentage: ((+member.allocationPercentage *10000)/100) as number
         }
     });
 }
@@ -13,11 +13,11 @@ const convertEmployeeToUIModel = (members: Employee[]): EmployeeUI[] => {
 const convertUIModelToEmployee = (member: EmployeeUI): Employee => {
     return {
         ...member,
-        allocationPercentage: (member.allocationPercentage / 1000 * 100).toString()
+        allocationPercentage: (member.allocationPercentage * 100/10000).toString()
     };
 }
 
 export const EmployeeMapper = {
     convertEmployeeToUIModel,
     convertUIModelToEmployee
-};
+};0

@@ -1,4 +1,5 @@
-@if(!selectedMember && filteredMembers.length > 0) {
+
+@if(!selectedMember) {
     <div>
         <form [formGroup]="memberForm">
             <label for="member"> Select Team Member: </label>
@@ -18,7 +19,9 @@
 }
 @if(selectedMember){
 <div style="margin-bottom:16px; border:1px solid #eee; padding: 12px; border-radius: 6px; background: #fafbfc;">
-    {{ selectedMember.name }} - Current Allocation: {{ selectedMember.allocationPercentage }}%
+    {{ selectedMember.name }} :
+    Current Project End Date: {{ selectedMember.currentProjectEndDate | date: 'dd/MM/YYYY' }} 
+    Current Allocation: {{ selectedMember.allocationPercentage }}%
 </div>
 
 <form [formGroup]="allocationForm">

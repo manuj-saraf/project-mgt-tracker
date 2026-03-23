@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { EmployeeUI } from '../../../../shared/@models/employee-ui.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MemberService } from '../../../../shared/services/member.service';
-import { UserRoles } from '../../../../shared/@config/user-roles';
+import { EmployeeUI } from '../../../shared/@models/employee-ui.model';
+import { MemberService } from '../../../shared/services/member.service';
+import { UserRoles } from '../../../shared/@config/user-roles';
+
 
 @Component({
   selector: 'app-update-allocation',
@@ -104,8 +105,8 @@ export class UpdateAllocationComponent {
 
   onSave(): void {
     if(this.allocationForm.valid && this.selectedMember) {
-      const values = this.allocationForm.value();
-      console.log("values:" , values); // TODO: update end date and allocaiton 
+      const values = this.allocationForm.value;
+      this.memberService.updateMember({ ...this.selectedMember, ...values });
       this.selectedMember = null;
       this.memberForm.reset();
     }

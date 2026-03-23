@@ -41,6 +41,16 @@ export class MemberService {
       console.log("Member added:",  this.membersList.value);
     }
   }
+  updateMember(updatedMember: EmployeeUI): void {
+    const currentMembers = this.membersList.value;
+    const index = currentMembers.findIndex(m => m.id === updatedMember.id);
+    if (index !== -1) {
+      const employee = EmployeeMapper.convertUIModelToEmployee(updatedMember);
+      currentMembers[index] = employee;
+      this.membersList.next([...currentMembers]);
+    }
+  }
+
 
 //   removeMember(member: Employee): void {
 //     const currentMembers = this.membersList.value;
