@@ -43,9 +43,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (this.currentUser.role === UserRoles.Member) {
             return this.navigationData.filter(link => link.label === 'View Task');
         }
-
-        // For Manager and Architect, show all links
-        return this.navigationData;
+        else {
+            // For Manager and Architect, show all links
+        return this.navigationData.filter(link => link.label !== 'View Task');
+        }
+        
     }
 
     navigate(route: string): void {

@@ -42,9 +42,11 @@ export class BaseComponent implements OnInit, OnDestroy {
 
     if (this.currentUser.role === UserRoles.Member) {
       return this.navigationData.filter(link => link.label === 'View Task');
+    }else {
+      return this.navigationData.filter(link => link.label !== 'View Task');
     }
 
-    return this.navigationData;
+    
   }
 
   get hasChildRoute(): boolean {
