@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="dataRow" *ngFor="let member of pagedMembers">
+      <tr class="dataRow" *ngFor="let member of pagedMembers; trackBy: member.id">
         <td>{{ member.name }}</td> 
         <td>{{ member.role }}</td>
         <td>{{ member.experience }}</td>
