@@ -14,20 +14,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="dataRow" *ngFor="let member of pagedMembers; trackBy: member.id">
-        <td>{{ member.name }}</td> 
-        <td>{{ member.role }}</td>
-        <td>{{ member.experience }}</td>
-        <td class="maxWid200" style="overflow-x:auto; white-space: break-spaces;">
-            <span *ngFor="let skill of member.skills; let last = last">
-                {{ skill }}<span *ngIf="!last">, </span>
-            </span>
-        </td>
-        <td class="maxWid400" style="overflow-x:auto; white-space: normal;">{{ member.profileDescription }}</td>
-        <td>{{ member.currentProjectStartDate }}</td>
-        <td>{{ member.currentProjectEndDate }}</td>
-        <td>{{ member.allocationPercentage }}%</td>
-      </tr>
+        @for(member of pagedMembers; track member.id){
+        <tr class="dataRow" >
+            <td>{{ member.name }}</td> 
+            <td>{{ member.role }}</td>
+            <td>{{ member.experience }}</td>
+            <td class="maxWid200" style="overflow-x:auto; white-space: break-spaces;">
+                <span *ngFor="let skill of member.skills; let last = last">
+                    {{ skill }}<span *ngIf="!last">, </span>
+                </span>
+            </td>
+            <td class="maxWid400" style="overflow-x:auto; white-space: normal;">{{ member.profileDescription }}</td>
+            <td>{{ member.currentProjectStartDate }}</td>
+            <td>{{ member.currentProjectEndDate }}</td>
+            <td>{{ member.allocationPercentage }}%</td>
+        </tr>
+        }
     </tbody>
   </table>
 </div>

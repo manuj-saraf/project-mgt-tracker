@@ -35,6 +35,10 @@ export class ViewMemberComponent {
     this.pagedMembers = this.members.slice(startIndex, endIndex);
   }
 
+  trackByMemberId(index: number, member: EmployeeUI): number {
+    return member.id;
+  }
+  
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
