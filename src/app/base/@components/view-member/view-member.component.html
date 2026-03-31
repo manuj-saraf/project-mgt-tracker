@@ -25,8 +25,8 @@
                 </span>
             </td>
             <td class="maxWid400" style="overflow-x:auto; white-space: normal;">{{ member.profileDescription }}</td>
-            <td>{{ member.currentProjectStartDate }}</td>
-            <td>{{ member.currentProjectEndDate }}</td>
+            <td>{{ member.currentProjectStartDate | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ member.currentProjectEndDate | date: 'dd/MM/YYYY' }}</td>
             <td>{{ member.allocationPercentage }}%</td>
         </tr>
         }
