@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-view-task',
   standalone: false,
   templateUrl: './view-task.component.html',
-  styleUrl: './view-task.component.scss'
+  styleUrls: ['./view-task.component.scss']
 })
 export class ViewTaskComponent {
 

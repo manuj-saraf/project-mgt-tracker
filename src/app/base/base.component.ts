@@ -14,14 +14,16 @@ import { AlertService } from '../shared/services/alert.service';
   standalone: false
 })
 export class BaseComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private memberService = inject(MemberService);
-  alertService = inject(AlertService);
+  // private route = inject(ActivatedRoute);
+  // private router = inject(Router);
+  // private memberService = inject(MemberService);
+  // alertService = inject(AlertService);
   private subscription = new Subscription();
   currentUser: EmployeeUI | null = null;
 
   navigationData = allNavigationLinks;
+
+  constructor(private route : ActivatedRoute, private readonly router: Router, private readonly memberService :MemberService, readonly alertService: AlertService){}
 
   ngOnInit(): void {
     this.subscription.add(

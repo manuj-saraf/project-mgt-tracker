@@ -9,7 +9,7 @@ import { UserRoles } from '../../../shared/@config/user-roles';
   selector: 'app-update-allocation',
   standalone: false,
   templateUrl: './update-allocation.component.html',
-  styleUrl: './update-allocation.component.scss'
+  styleUrls: ['./update-allocation.component.scss']
 })
 export class UpdateAllocationComponent {
   members: EmployeeUI[] = [];
@@ -20,10 +20,8 @@ export class UpdateAllocationComponent {
   memberForm!: FormGroup;
   allocationForm!: FormGroup;
 
-  memberService = inject(MemberService);
-  fb = inject(FormBuilder);
   
-  constructor() {
+  constructor(private fb : FormBuilder, private memberService :MemberService) {
     this.memberForm = this.fb.group({
       member:[null, Validators.required]
     });
@@ -53,6 +51,10 @@ export class UpdateAllocationComponent {
       this.updateSaveButtonState();
     });
     
+  }
+
+  trackByMemberId(i:number, member:any){
+    return member.id
   }
 
   filterMembers(): void {

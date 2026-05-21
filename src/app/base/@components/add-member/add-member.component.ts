@@ -14,17 +14,17 @@ import { AlertService } from '../../../shared/services/alert.service';
   standalone: false
 })
 export class AddMemberComponent implements OnDestroy {
-  private fb = inject(FormBuilder);
-  private memberService = inject(MemberService);
-  private alertService = inject(AlertService);
-  private router = inject(Router);
+  // private fb = inject(FormBuilder);
+  // private memberService = inject(MemberService);
+  // private alertService = inject(AlertService);
+  // private router = inject(Router);
 
   skillsOptions = Object.values(Skills);
   userRoles = UserRoles;
 
   addMemberForm!: FormGroup;
   
-constructor() {
+constructor(private fb : FormBuilder, private memberService : MemberService, private alertService : AlertService, private router : Router) {
   this.createForm();
 }
 

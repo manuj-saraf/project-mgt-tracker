@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-assign-task',
   standalone: false,
   templateUrl: './assign-task.component.html',
-  styleUrl: './assign-task.component.scss'
+  styleUrls: ['./assign-task.component.scss']
 })
 export class AssignTaskComponent {
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../../shared/@models/employee.model';
 import { EmployeeUI } from '../../../shared/@models/employee-ui.model';
 import { MemberService } from '../../../shared/services/member.service';
@@ -7,17 +7,17 @@ import { MemberService } from '../../../shared/services/member.service';
   selector: 'app-view-member',
   standalone: false,
   templateUrl: './view-member.component.html',
-  styleUrl: './view-member.component.scss'
+  styleUrls: ['./view-member.component.scss']
 })
-export class ViewMemberComponent {
+export class ViewMemberComponent  implements OnInit {
   members: EmployeeUI[] = [];
   pagedMembers: EmployeeUI[] = [];
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;
 
-  memberService = inject(MemberService);
-  constructor() {}
+  // memberService = inject(MemberService);
+  constructor(private memberService : MemberService) {}
 
   ngOnInit(): void {
     this.loadMembers();

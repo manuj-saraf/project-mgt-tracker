@@ -14,8 +14,8 @@
       </tr>
     </thead>
     <tbody>
-        @for(member of pagedMembers; track member.id){
-        <tr class="dataRow" >
+        
+        <tr *ngFor="let member of pagedMembers;" class="dataRow" >
             <td>{{ member.name }}</td> 
             <td>{{ member.role }}</td>
             <td>{{ member.experience }}</td>
@@ -29,7 +29,7 @@
             <td>{{ member.currentProjectEndDate | date: 'dd/MM/YYYY' }}</td>
             <td>{{ member.allocationPercentage }}%</td>
         </tr>
-        }
+        
     </tbody>
   </table>
 </div>

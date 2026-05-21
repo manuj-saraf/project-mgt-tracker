@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-approve-task',
   standalone: false,
   templateUrl: './approve-task.component.html',
-  styleUrl: './approve-task.component.scss'
+  styleUrls: ['./approve-task.component.scss']
 })
 export class ApproveTaskComponent {
 

@@ -1,23 +1,22 @@
 
-@if(!selectedMember) {
-    <div>
+
+    <div *ngIf="!selectedMember">
         <form [formGroup]="memberForm">
             <label for="member"> Select Team Member: </label>
             <select id="member" formControlName="member">
-                @for(member of filteredMembers; track member.id){
-                <option value="{{ member.id }}">{{ member.name }}</option>
-                }
+                <option *ngFor="let member of filteredMembers; trackBy: trackByMemberId" value="{{ member.id }}">{{ member.name }}</option>
             </select>
             <button type="button" (click)="onMemberSelect()" [disabled]="memberForm.invalid || filteredMembers.length === 0">Select</button>
         </form>
-        @if(filteredMembers.length === 0){
-        <div class="error">
+        
+        <div *ngIf="filteredMembers.length === 0" class="error">
             No team members available. Please add members first before updating allocation.
         </div>
-        }
+        
     </div>
-}
-@if(selectedMember){
+
+
+<ng-container *ngIf="selectedMember">
 <div style="margin-bottom:16px; border:1px solid #eee; padding: 12px; border-radius: 6px; background: #fafbfc;">
     {{ selectedMember.name }} :
     Current Project End Date: {{ selectedMember.currentProjectEndDate | date: 'dd/MM/YYYY' }} 
@@ -38,4 +37,4 @@
         <button type="button" (click)="onSave()" [disabled]="saveDisabled">Save</button>
     </div>
 </form>
-}
+</ng-container>
