@@ -1,7 +1,8 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: LoginComponent
@@ -15,3 +16,9 @@ export const routes: Routes = [
     loadChildren: () => import('./base/base.module').then(m => m.BaseModule)
   }
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
