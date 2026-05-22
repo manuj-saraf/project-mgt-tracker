@@ -18,7 +18,7 @@
     <h2>Welcome to Project Management Tracker</h2>
     <p>Manage your projects and team members efficiently</p>
     <div class="feature-cards">
-      <div class="card" *ngFor="let item of navigationLinks" (click)="navigate(item.route)">
+      <div class="card" *ngFor="let item of navigationLinks; trackBy:trackByFn" (click)="navigate(item.route)">
         <h3>{{ item.label }}</h3>
         <p>{{ item.description }}</p>
       </div>

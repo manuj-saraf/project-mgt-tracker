@@ -2,7 +2,7 @@
   <div class="header-container">
     <!-- App Logo/Name -->
     <div class="header-left">
-      <h1 class="app-name">{{ appName }}</h1>
+      <h1 class="app-name">Project Management Tracker</h1>
     </div>
 
     <!-- Hamburger Menu for Mobile -->
@@ -17,7 +17,7 @@
       <!-- Navigation Links -->
       <nav class="nav-links">
         <a 
-          *ngFor="let link of navigationLinks" 
+          *ngFor="let link of navigationLinks; trackBy: trackByFn" 
           class="nav-link"
           (click)="navigate(link.route)"
           href="javascript:void(0)">
@@ -29,7 +29,7 @@
           *ngIf="currentUser"
           class="nav-link logout-link"
           (click)="logout()"
-          [title]="'Logout ' + currentUser.name"
+          [title]="'Logout ' + currentUser.name + ' (' + currentUser.role + ')'"
           href="javascript:void(0)">
           Logout
         </a>

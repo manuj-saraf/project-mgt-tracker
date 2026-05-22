@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { defaultEmployees } from '../@config/employees';
 import { Employee } from '../@models/employee.model';
 import { EmployeeUI } from '../@models/employee-ui.model';
@@ -33,6 +33,11 @@ export class MemberService {
     }
     return null;
   }
+
+  getCurrentUserDetails(): Observable<EmployeeUI | null> {
+    return of(this.currentUserSubject?.value);
+  }
+
   addMember(member: EmployeeUI): void {
     const currentMembers = this.membersList.value;
     if (!currentMembers.find(m => m.id === member.id)) {

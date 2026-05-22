@@ -1,51 +1,53 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MemberService } from '../services/member.service';
 import { UserRoles } from '../@config/user-roles';
 import { EmployeeUI } from '../@models/employee-ui.model';
-import { allNavigationLinks } from '../../base/base.helper';
+import { allNavigationLinks, NavigationData } from '../../base/base.helper';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
     isMenuOpen: boolean = false;
-    appName: string = 'Project Management Tracker';
     currentUser: EmployeeUI | null = null;
-    private subscription: Subscription = new Subscription();
 
     private navigationData = allNavigationLinks;
-
+    private readonly destroy$ = new Subject<void>();
 
     constructor(private router: Router, private memberService: MemberService) { }
 
     ngOnInit(): void {
-        this.subscription.add(
-            this.memberService.currentUser$.subscribe(user => {
-                this.currentUser = user;
-            })
-        );
+        this.memberService.getCurrentUserDetails().pipe(takeUntil(this.destroy$)).subscribe(user => {
+            this.currentUser = user;
+        });
+        
+    }
+
+    trackByFn(index: number, navInfo: NavigationData): NavigationData{
+        return navInfo;
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
-    get navigationLinks() {
+    get navigationLinks(): NavigationData[] {
         if (!this.currentUser) {
             return [];
         }
 
         if (this.currentUser.role === UserRoles.Member) {
-            return this.navigationData.filter(link => link.label === 'View Task');
+            return this.navigationData.filter(link => link.id === 'viewTask');
         }
         else {
-            // For Manager and Architect, show all links
-        return this.navigationData.filter(link => link.label !== 'View Task');
+        return this.navigationData.filter(link => link.id !== 'viewTask');
         }
         
     }
