@@ -1,49 +1,45 @@
-<h1>Team Members</h1> 
-<div class="table-responsive ">
-  <table class="table table-bordered align-middle">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th class="maxWid200">Experience (years)</th>
-        <th class="maxWid200">Skills</th>
-        <th class="maxWid400">Profile Description</th>
-        <th>Profile Start</th>
-        <th>Profile End</th>
-        <th>Allocation %</th>
-      </tr>
-    </thead>
-    <tbody>
-        
-        <tr *ngFor="let member of pagedMembers;" class="dataRow" >
-            <td>{{ member.name }}</td> 
-            <td>{{ member.role }}</td>
-            <td>{{ member.experience }}</td>
-            <td class="maxWid200" style="overflow-x:auto; white-space: break-spaces;">
-                <span *ngFor="let skill of member.skills; let last = last">
-                    {{ skill }}<span *ngIf="!last">, </span>
-                </span>
-            </td>
-            <td class="maxWid400" style="overflow-x:auto; white-space: normal;">{{ member.profileDescription }}</td>
-            <td>{{ member.currentProjectStartDate | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ member.currentProjectEndDate | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ member.allocationPercentage }}%</td>
+<div class="view-member-container">
+  <h2>Team Members</h2>
+  <div class="table-responsive">
+    <table class="table" *ngIf="members?.length;else noMembers">
+      <thead>
+        <tr class="bottomBorder">
+          <th class="maxWid100">Member Id</th>
+          <th class="maxWid100">Name</th>
+          <th class="maxWid100">Role</th>
+          <th class="maxWid100">Experience (years)</th>
+          <th class="maxWid200 breakAllWords">Skills</th>
+          <th class="maxWid400 breakAllWords">Profile Description</th>
+          <th class="maxWid100">Project Start</th>
+          <th class="maxWid100">Project End</th>
+          <th class="maxWid100">Allocation %</th>
         </tr>
-        
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let member of members; trackBy: trackByMemberId" class="bottomBorder">
+        <td class="maxWid100">{{ member.id }}</td>
+        <td class="maxWid100 wordBreak" title="{{member.name}}">{{ member.name }}</td>
+        <td class="maxWid100">{{ member.role }}</td>
+        <td class="maxWid100">{{ member.experience }}</td>
+        <td class="maxWid200 breakAllWords">
+          <span *ngFor="let skill of member.skills; let last = last; trackBy: trackByMemberSkills">
+            {{ skill }}<span *ngIf="!last">, </span>
+          </span>
+        </td>
+        <td class="maxWid400 breakAllWords">{{ member.profileDescription }}</td>
+        <td class="maxWid100">{{ member.currentProjectStartDate | date: 'dd/MM/YYYY' }}</td>
+        <td class="maxWid100">{{ member.currentProjectEndDate | date: 'dd/MM/YYYY' }}</td>
+        <td class="maxWid100">{{ member.allocationPercentage }}%</td>
+      </tr>
+      </tbody>
+
+    </table>
+  </div>
+  <!-- No members -->
+  <ng-template #noMembers>
+    <div class="error textCenter">
+      No team members found. Please add members to the project.
+    </div>
+  </ng-template>
 </div>
-<!-- Pagination Controls -->
- <nav *ngIf="totalPages > 1" aria-label="Page navigation">
-  <ul class="pagination justify-content-center">
-    <li class="page-item" [class.disabled]="currentPage === 1">
-      <button class="page-link" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">Previous</button>
-    </li>
-    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === (i + 1)">
-      <button class="page-link" (click)="goToPage(i+ 1)">{{ i + 1 }}</button>
-    </li>
-    <li class="page-item" [class.disabled]="currentPage === totalPages">
-      <button class="page-link" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Next</button>
-    </li>
-  </ul> 
-</nav>

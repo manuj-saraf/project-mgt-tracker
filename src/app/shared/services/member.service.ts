@@ -4,6 +4,7 @@ import { defaultEmployees } from '../@config/employees';
 import { Employee } from '../@models/employee.model';
 import { EmployeeUI } from '../@models/employee-ui.model';
 import { EmployeeMapper } from '../@mappers/member-mapper';
+import { UserRoles } from '../@config/user-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,11 @@ export class MemberService {
 
   getMembers(): EmployeeUI[] {
     return EmployeeMapper.convertEmployeeToUIModel(this.membersList.value);
+  }
+
+  getAllMembers(){
+    const members = this.membersList.value.filter(emp=> emp.role === UserRoles.Member);
+    return of(EmployeeMapper.convertEmployeeToUIModel(members));
   }
 
   getMembersCount(): number {

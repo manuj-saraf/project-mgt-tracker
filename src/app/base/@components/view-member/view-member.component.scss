@@ -1,14 +1,36 @@
+@use '../../../../colors' as *;
+@use '../../../../styles' as *;
+
+.view-member-container{
+    padding: 20px;
+    margin: 0 auto;
+    background:$very-light-gray;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+
+.maxWid100{
+    max-width: 100px;
+}
+
 .maxWid200{
-    width: 200px;
     max-width: 200px;
 }
 .maxWid400{
-    width: 400px;
     max-width: 400px;
 }
 
-.dataRow{
-    border-bottom: 1px solid #ddd;
+.wordBreak{
+    word-break: break-word;
+}
+
+.breakAllWords  {
+    word-break: break-all;
+}
+
+.bottomBorder{
+    border-bottom: 1px solid $light-gray;
 }
 
 .table-responsive{
@@ -16,28 +38,18 @@
 }
 
 table{
-    width:100%;
+    width:90%;
+    max-width:90%;
     border-collapse: collapse;
+    margin:auto 50px;
 }
 
 th,td {
     vertical-align: middle;
     text-align: left;
+    padding:7px 5px;
 }
 
-th:nth-child(4), td:nth-child(4) {
-    max-width:200px;
-    width:200px;
-    overflow-x : auto;
-    white-space: nowrap;
-}
-
-th:nth-child(5), td:nth-child(5) {
-    max-width:400px;
-    width:400px;
-    overflow-x : auto;
-    white-space: normal;
-}
 
 @media (max-width: 768px) {
     th, td{
@@ -45,15 +57,11 @@ th:nth-child(5), td:nth-child(5) {
         padding: 0.4rem;
     }
 
-    th:nth-child(4), td:nth-child(4),
     th:nth-child(5), td:nth-child(5) {
         max-width: 120px;
-        width: 120px;
     }
 
-    th:nth-child(4), td:nth-child(4),
-    th:nth-child(5), td:nth-child(5) {
+    th:nth-child(6), td:nth-child(6) {
         max-width: 180px;
-        width: 180px;
     }
 }
