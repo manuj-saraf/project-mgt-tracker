@@ -23,6 +23,9 @@ textarea {
   &:focus{
       outline:none;
   }
+  &:disabled{
+      background-color: $very-light-gray;
+  }
 }
 
 textarea {

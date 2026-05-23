@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { defaultEmployees } from '../@config/employees';
 import { UserRoles } from '../@config/user-roles';
+import { EmployeeUI } from '../@models/employee-ui.model';
 import { MemberService } from '../services/member.service';
 
 @Component({
@@ -39,11 +40,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   
   onUserTypeChange(type: string){
-    this.loginForm.get('userId')?.reset();
+    this.userId?.reset();
     const selectedType = type as UserRoles;
     if([UserRoles.Architect, UserRoles.Manager].includes(selectedType)){
       const selectedUserId = defaultEmployees.find(emp => emp.role === selectedType)?.id;
-      this.loginForm.get('userId')?.setValue(selectedUserId);
+      this.userId?.setValue(selectedUserId);
     }
   }
 
@@ -53,6 +54,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   onSubmit(): void {
+    this.removeInvalidUserIdError();
+
+    if (this.loginForm.valid) {
+      const userIdValue = Number(this.loginForm.value.userId);
+
+      this.memberService.getMemberById(userIdValue)?.pipe(takeUntil(this.destroy$)).subscribe({
+        next: (member)=> {this.onFetchMemberSuccess(member);},
+        error: ()=> { this.onFetchMemberError();}
+      });
+    }
+  }
+
+  removeInvalidUserIdError() : void {
     // keep existing controls but remove only invalidUserId error
     const errors = this.userId?.errors;
     if (errors?.['invalidUserId']) {
@@ -64,22 +78,25 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userId?.setErrors(null);
       }
     }
-
-    if (this.loginForm.valid) {
-      const userIdValue = Number(this.loginForm.value.userId);
-      const member = this.memberService.getMemberById(userIdValue);
-
-      if (member) {
-        this.memberService.setCurrentUser(member);
-        this.router.navigate(['/home']);
-      } else {
-        this.userId?.setErrors({ ...this.userId?.errors, invalidUserId: true });
-        this.userId?.markAsTouched();
-      }
-    }
   }
 
-  ngOnDestroy(){
+  onFetchMemberSuccess(member: EmployeeUI) : void {
+    this.memberService.setCurrentUser(member);
+    const redirectionMapper = new Map<UserRoles, string>([
+      [UserRoles.Architect, "/home"],
+      [UserRoles.Manager, "/home"],
+      [UserRoles.Member, "/home/view-task"]
+    ])
+    const redirectTo = redirectionMapper.get(member.role);
+    this.router.navigate([redirectTo]);
+  }
+
+  onFetchMemberError(): void {
+    this.userId?.setErrors({ ...this.userId?.errors, invalidUserId: true });
+    this.userId?.markAsTouched();
+  }
+
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }

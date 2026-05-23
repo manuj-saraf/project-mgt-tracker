@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { defaultEmployees } from '../@config/employees';
 import { Employee } from '../@models/employee.model';
-import { EmployeeUI } from '../@models/employee-ui.model';
+import { EmployeeAllocationUI, EmployeeUI } from '../@models/employee-ui.model';
 import { EmployeeMapper } from '../@mappers/member-mapper';
 import { UserRoles } from '../@config/user-roles';
 
@@ -32,12 +32,20 @@ export class MemberService {
     return this.membersList.value.length;
   }
 
-  getMemberById(id: number): EmployeeUI | null {
+  getMemberById(id: number): Observable<EmployeeUI> {
     const member = this.membersList.value.find(member => member.id === id);
     if (member) {
-      return EmployeeMapper.convertEmployeeToUIModel([member])[0];
+      return of(EmployeeMapper.convertEmployeeToUIModel([member])[0]);
     }
-    return null;
+    return throwError(()=> new Error('Api returned null data'));
+  }
+
+  getMemberToUpdateAllocation(id:number): Observable<EmployeeAllocationUI>{
+    const member = this.membersList.value.find(member => member.id === id);
+    if(member){
+      return of(EmployeeMapper.getEmployeeUIToUpdateAllocation(member));
+    }
+    return throwError(()=> new Error('Api returned null data'));
   }
 
   getCurrentUserDetails(): Observable<EmployeeUI | null> {
@@ -52,25 +60,14 @@ export class MemberService {
       console.log("Member added:",  this.membersList.value);
     }
   }
-  updateMember(updatedMember: EmployeeUI): void {
+  updateMember(updatedMember: EmployeeAllocationUI): Observable<{message: string}> {
     const currentMembers = this.membersList.value;
     const index = currentMembers.findIndex(m => m.id === updatedMember.id);
-    if (index !== -1) {
-      const employee = EmployeeMapper.convertUIModelToEmployee(updatedMember);
-      currentMembers[index] = employee;
-      this.membersList.next([...currentMembers]);
-    }
+    const employee = EmployeeMapper.updateEmployeeAllocationInfoToEmployee(updatedMember, currentMembers[index]);
+    currentMembers[index] = employee;
+    this.membersList.next([...currentMembers]);
+    return of({message: "Member updated successfullly!"});
   }
-
-
-//   removeMember(member: Employee): void {
-//     const currentMembers = this.membersList.value;
-//     this.membersList.next(currentMembers.filter(m => m.id !== member.id));
-//   }
-
-//   updateMembers(members: Employee[]): void {
-//     this.membersList.next(members);
-//   }
 
   setCurrentUser(user: EmployeeUI | null): void {
     this.currentUserSubject.next(user);

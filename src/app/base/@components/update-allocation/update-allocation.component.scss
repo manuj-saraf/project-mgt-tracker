@@ -1,43 +1,38 @@
 @use '../../../../styles' as *;
 @use '../../../../colors' as *;
 
+.update-allocation-container{
+    max-width: 500px;
+    margin:0 auto;
+    padding:20px;
+    border-radius:8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 form {
     display: flex;
     flex-direction:column;
-    gap: 1;
-    max-width: 500px;
-    margin: 0 auto;
 }
 
+.width50Percent{
+    width:50%;
+}
 
 .selected-member-details{
-    margin-bottom: 1.5rem;
-    border:1px solid #eee;
-    padding: 1rem;
-    border-radius: 6px;
-    background: #fafbfc;
-    font-size:0.98rem;
-}
-
-
-@media screen and (max-width: 600px) {
-    form {
-        gap: 0.7rem;
-        max-width:100%;
-        padding: 0 0.5rem;
-    }
-    .selected-member-details{
-        font-size:0.95rem;
-        padding:0.5rem;
-    }
-    button{
-        width:100%;
-        margin:0.3rem 0 0 0;
-    }
+    margin: 1.75rem 0;
+    font-weight: bold;
 }
 
 .fieldWrapper{
     display:flex;
     justify-content: space-between;
     gap:0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    form {
+        gap: 0.7rem;
+        max-width:100%;
+        padding: 0 0.5rem;
+    }    
 }

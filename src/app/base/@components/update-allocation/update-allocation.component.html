@@ -1,40 +1,39 @@
-
-
-    <div *ngIf="!selectedMember">
+<div class="update-allocation-container">
+    <h2> Update Team Allocation</h2>    <!-- Select member for Updation -->
+    <div>
         <form [formGroup]="memberForm">
-            <label for="member"> Select Team Member: </label>
-            <select id="member" formControlName="member">
-                <option *ngFor="let member of filteredMembers; trackBy: trackByMemberId" value="{{ member.id }}">{{ member.name }}</option>
-            </select>
-            <button type="button" class="submit-button mt15" (click)="onMemberSelect()" [disabled]="memberForm.invalid || filteredMembers.length === 0">Select</button>
-        </form>
-        
-        <div *ngIf="filteredMembers.length === 0" class="error">
-            No team members available. Please add members first before updating allocation.
+            <label for="member"> Enter Team member id: </label>
+            <input type="text" id="member" formControlName="member" class="form-input" 
+                placeholder="Enter 6-digit User ID" maxlength="6" pattern="[0-9]*" inputmode="numeric" >
+                <!-- Error Messages -->
+            <div class="error" *ngIf="memberForm.get('member')?.invalid && memberForm.get('member')?.touched">
+                <span *ngIf="memberForm.get('member')?.errors?.['required']">User ID is required</span>
+                <span *ngIf="memberForm.get('member')?.errors?.['pattern']">User ID must contain only numbers</span>
+                <span *ngIf="memberForm.get('member')?.errors?.['invalidUserId']">User ID does not Exist</span>
+            </div>
+            <button type="button" id="fetchMemberBtn" class="submit-button mt15" (click)="onFetchMemberDetails()" [disabled]="memberForm.invalid">Submit</button>
+        </form>        
+    </div>
+    <!-- Update Allocation -->
+    <ng-container *ngIf="selectedMember">
+        <div class="selected-member-details">
+            Update Allocation for: {{ selectedMember.name }} ( {{selectedMember.id}} ) - Existing Allocation :  {{ selectedMember.allocationPercentage }}% 
         </div>
         
-    </div>
-
-
-<ng-container *ngIf="selectedMember">
-<div style="margin-bottom:16px; border:1px solid #eee; padding: 12px; border-radius: 6px; background: #fafbfc;">
-    {{ selectedMember.name }} :
-    Current Project End Date: {{ selectedMember.currentProjectEndDate | date: 'dd/MM/YYYY' }} 
-    Current Allocation: {{ selectedMember.allocationPercentage }}%
+        <form [formGroup]="allocationForm">
+            <div class="fieldWrapper">
+                <label class="width50Percent" for="currentProjectEndDate">Current Project End Date:</label>
+                <input class="width50Percent" type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate" />
+            </div>
+            <div class="fieldWrapper mt15">
+                <label class="width50Percent" for="allocationPercentage">New Allocation Percentage:</label>
+                <input class="width50Percent" type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100" />
+            </div>
+            <div class="button-group mt15">
+                <button type="button" id="saveBtn" class="cancel-button" (click)="onSave()" [disabled]="saveDisabled">Save</button>
+                <button type="button" id="cancelBtn" class="submit-button" (click)="onReset()">Reset</button>
+            </div>
+        </form>
+        </ng-container>
 </div>
 
-<form [formGroup]="allocationForm">
-    <div class="fieldWrapper">
-        <label for="currentProjectEndDate">Current Project End Date:</label>
-        <input type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate" />
-    </div>
-    <div class="fieldWrapper mt15">
-        <label for="allocationPercentage">Allocation Percentage:</label>
-        <input type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100" />
-    </div>
-    <div class="button-group mt15">
-        <button type="button" class="cancel-button" (click)="onSave()" [disabled]="saveDisabled">Save</button>
-        <button type="button" class="submit-button" (click)="onCancel()">Cancel</button>
-    </div>
-</form>
-</ng-container>

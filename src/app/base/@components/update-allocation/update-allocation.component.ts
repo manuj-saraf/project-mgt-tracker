@@ -1,116 +1,120 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeUI } from '../../../shared/@models/employee-ui.model';
+import { EmployeeAllocationUI, EmployeeUI } from '../../../shared/@models/employee-ui.model';
 import { MemberService } from '../../../shared/services/member.service';
-import { UserRoles } from '../../../shared/@config/user-roles';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 
 @Component({
   selector: 'app-update-allocation',
   standalone: false,
   templateUrl: './update-allocation.component.html',
-  styleUrls: ['./update-allocation.component.scss']
+  styleUrls: ['./update-allocation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UpdateAllocationComponent {
-  members: EmployeeUI[] = [];
-  filteredMembers: EmployeeUI[] = [];
-  selectedMember: EmployeeUI | null = null;
+export class UpdateAllocationComponent implements OnInit, OnDestroy {
+  selectedMember: EmployeeAllocationUI | null = null;
   currentUser: EmployeeUI | null = null;
   saveDisabled: boolean = true;
+  
   memberForm!: FormGroup;
   allocationForm!: FormGroup;
 
+  destroy$ = new Subject<void>();
   
-  constructor(private fb : FormBuilder, private memberService :MemberService) {
+  constructor(private readonly fb : FormBuilder, private readonly alertService :AlertService, private readonly memberService :MemberService) {
+  }
+
+  ngOnInit(): void {
+    this.createForms();
+  }
+  
+  createForms(): void {
     this.memberForm = this.fb.group({
-      member:[null, Validators.required]
+      member:[null, [Validators.required, Validators.pattern(/^\d{1,6}$/)]]
     });
 
     this.allocationForm = this.fb.group({
-      id: [{value: '', disabled: true}],
-      name: [{value: '', disabled: true}],
-      currentProjectStartDate: [{value: '', disabled: true}],
-      currentProjectEndDate: [ '', Validators.required],
+      id: [ '', [Validators.required]],
+      currentProjectEndDate: [{value: '', disabled: true}],
       allocationPercentage: [0, [Validators.required, Validators.min(0), Validators.max(100)]]
     });
+
+    this.memberForm.get('member')?.valueChanges.pipe(takeUntil(this.destroy$), debounceTime(300)).subscribe(()=>{
+      this.removeInvalidUserError();    
+    })
   }
-  ngOnInit(): void {
-    this.members = this.memberService.getMembers();
-    this.currentUser = this.memberService.getCurrentUser();
-    this.filterMembers();
-    this.allocationForm.get('currentProjectEndDate')?.valueChanges.subscribe(endDt => {
-      const today = new Date();
-      const endDate = new Date(endDt);
-      if(endDate < today) {
-        this.allocationForm.get('allocationPercentage')?.setValue(0, { emitEvent: false });
-      }else{
-        this.allocationForm.get('allocationPercentage')?.setValue(100, { emitEvent: false });
+
+  removeInvalidUserError():void {
+    // keep existing control's error but remove only invalidUserId error
+    const memberIdCtrl = this.memberForm.get('member');
+    const errors = memberIdCtrl?.errors;
+    if (errors?.['invalidUserId']) {
+      delete errors['invalidUserId'];
+      const remainingErrorKeys = Object.keys(errors);
+      if (remainingErrorKeys.length) {
+        memberIdCtrl?.setErrors(errors);
+      } else {
+        memberIdCtrl?.setErrors(null);
       }
+    }
+  }
+
+  onFetchMemberDetails(): void {
+    const memberId = Number(this.memberForm.value.member);
+    this.memberService.getMemberToUpdateAllocation(memberId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (member) => {this.onFetchMemberSuccess(member)},
+      error: ()=> { this.onFetchMemberError();}
+    })
+  }
+
+  onFetchMemberSuccess(member: EmployeeAllocationUI): void {
+    this.selectedMember = member;
+    const currentDate = new Date();
+    const memberAllocationEndDate = new Date(member.currentProjectEndDate);
+    const updatedAllocation = (memberAllocationEndDate.getTime() < currentDate.getTime()) ? 0: 100;
+    this.allocationForm.reset({
+      id: member.id,
+      currentProjectEndDate : member.currentProjectEndDate,
+      allocationPercentage: updatedAllocation
     });
-    this.allocationForm.valueChanges.subscribe(() => {
-      this.updateSaveButtonState();
-    });
-    
+    this.allocationForm.get('currentProjectEndDate')?.disable();
+    this.allocationForm.get('allocationPercentage')?.disable();
+    this.saveDisabled = updatedAllocation === this.selectedMember?.allocationPercentage;
   }
 
-  trackByMemberId(i:number, member:any){
-    return member.id
+  onFetchMemberError(): void {
+    const memberCtrl = this.memberForm.get('member');
+    memberCtrl?.setErrors({...memberCtrl?.errors, invalidUserId: true});
+    memberCtrl?.markAsTouched();
+    this.selectedMember = null;
   }
 
-  filterMembers(): void {
-    if (!this.currentUser) {
-      this.filteredMembers = [];
-      return;
-    }
-    if(this.currentUser.role === UserRoles.Architect) {
-      this.filteredMembers = this.members.filter(member => member.role !== UserRoles.Architect);
-    }
-    else if(this.currentUser.role === UserRoles.Manager) {
-      this.filteredMembers = this.members.filter(member => ![UserRoles.Architect, UserRoles.Manager].includes(member.role));
-    } else {
-      this.filteredMembers = [];
+
+  onSave(): void {
+    if(this.allocationForm.valid && this.selectedMember) {
+      const values = this.allocationForm.getRawValue();
+      const name = this.selectedMember.name;
+      this.memberService.updateMember({ name, ...values }).pipe().subscribe(()=>{this.onAllocationUpdateSuccess()});
     }
   }
 
-  onCancel(): void {
+  onReset(): void {
     this.selectedMember = null;
     this.memberForm.reset();
     this.allocationForm.reset();
   }
-  updateSaveButtonState(){
-    if(!this.selectedMember){
-      this.saveDisabled = true;
-      return;
-    }
-    const formValue = this.allocationForm.getRawValue();
-    const isAllocationChanged = formValue.currentProjectEndDate !== this.selectedMember.currentProjectEndDate || formValue.allocationPercentage !== this.selectedMember.allocationPercentage;
-    this.saveDisabled = !this.allocationForm.valid || !isAllocationChanged;
+
+  onAllocationUpdateSuccess(): void {
+    this.selectedMember = null;
+    this.memberForm.reset();
+    this.alertService.showAlert('Member Allocation updated successfully! ', 'success');
   }
 
-  onMemberSelect(): void {
-    const memberId = this.memberForm.value.member;
-    this.selectedMember = this.filteredMembers.find(m => m.id === +memberId) || null;
-    if (this.selectedMember) {
-      this.allocationForm.reset({
-        id: this.selectedMember.id,
-        name: this.selectedMember.name,
-        currentProjectStartDate: this.selectedMember.currentProjectStartDate,
-        currentProjectEndDate: this.selectedMember.currentProjectEndDate,
-        allocationPercentage: this.selectedMember.allocationPercentage
-      });
-      this.allocationForm.get('id')?.disable();
-      this.allocationForm.get('name')?.disable();
-      this.allocationForm.get('currentProjectStartDate')?.disable();
-      this.saveDisabled = true;
-    }
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  onSave(): void {
-    if(this.allocationForm.valid && this.selectedMember) {
-      const values = this.allocationForm.value;
-      this.memberService.updateMember({ ...this.selectedMember, ...values });
-      this.selectedMember = null;
-      this.memberForm.reset();
-    }
-  }
 }
