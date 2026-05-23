@@ -1,19 +1,16 @@
 <div class="add-member-container">
   <h2>Add New Member</h2>
-  <form [formGroup]="addMemberForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="id">ID:</label>
-      <input type="number" id="id" formControlName="id" readonly>
-    </div>
-
+  <form [formGroup]="addMemberForm">
+    <!-- Name-->
     <div class="form-group">
       <label for="name">Name:</label>
-      <input type="text" id="name" formControlName="name">
+      <input type="text" id="name" formControlName="name" autocomplete="off">
       <div *ngIf="addMemberForm.get('name')?.invalid && addMemberForm.get('name')?.touched" class="error">
-        Name is required.
+        <div *ngIf="addMemberForm.get('name')?.errors?.['required']">Name is required.</div>
+        <div *ngIf="addMemberForm.get('name')?.errors?.['pattern']">Please enter a valid name</div>
       </div>
     </div>
-
+    <!-- Experience -->
     <div class="form-group">
       <label for="experience">Experience (years):</label>
       <input type="number" id="experience" formControlName="experience" min="0" max="40">
@@ -23,41 +20,44 @@
         <div *ngIf="addMemberForm.get('experience')?.errors?.['max']">Experience cannot exceed 40 years.</div>
       </div>
     </div>
-
+    <!-- Skills -->
     <div class="form-group">
       <label for="skills">Skills (select at least 3):</label>
       <select id="skills" formControlName="skills" multiple>
-        <option *ngFor="let skill of skillsOptions" [value]="skill">{{ skill }}</option>
+        <option *ngFor="let skill of skillsOptions; trackBy: trackByMemberSkill" [value]="skill">{{ skill }}</option>
       </select>
       <div *ngIf="addMemberForm.get('skills')?.invalid && addMemberForm.get('skills')?.touched" class="error">
         Please select at least 3 skills.
       </div>
     </div>
-
+    <!-- Profile Description -->
     <div class="form-group">
       <label for="profileDescription">Profile Description:</label>
       <textarea id="profileDescription" formControlName="profileDescription" maxlength="1000"></textarea>
       <div *ngIf="addMemberForm.get('profileDescription')?.invalid && addMemberForm.get('profileDescription')?.touched" class="error">
-        Profile description cannot exceed 1000 characters.
+        <div *ngIf="addMemberForm.get('profileDescription')?.errors?.['minlength']">Profile description must be atleast 10 characters.</div>
+        <div *ngIf="addMemberForm.get('profileDescription')?.errors?.['maxlength']">Profile description cannot exceed 1000 characters.</div>        
       </div>
     </div>
-
+    <!-- Project Start Date -->
     <div class="form-group">
       <label for="currentProjectStartDate">Current Project Start Date:</label>
       <input type="date" id="currentProjectStartDate" formControlName="currentProjectStartDate">
       <div *ngIf="addMemberForm.get('currentProjectStartDate')?.invalid && addMemberForm.get('currentProjectStartDate')?.touched" class="error">
-        Start date is required.
+        <div *ngIf="addMemberForm.get('currentProjectStartDate')?.errors?.['required']">Start date is required.</div>
+        <div *ngIf="addMemberForm.get('currentProjectStartDate')?.errors?.['dateOrder']">Start date must be smaller than End date.</div> 
       </div>
     </div>
-
+    <!-- Project End Date -->
     <div class="form-group">
       <label for="currentProjectEndDate">Current Project End Date:</label>
       <input type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate">
       <div *ngIf="addMemberForm.get('currentProjectEndDate')?.invalid && addMemberForm.get('currentProjectEndDate')?.touched" class="error">
-        End date is required.
+        <div *ngIf="addMemberForm.get('currentProjectEndDate')?.errors?.['required']">End date is required.</div>
+        <div *ngIf="addMemberForm.get('currentProjectEndDate')?.errors?.['dateOrder']">End date must be greater than Start date.</div> 
       </div>
     </div>
-
+    <!-- Allocation Percentage -->
     <div class="form-group">
       <label for="allocationPercentage">Allocation Percentage:</label>
       <input type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100">
@@ -67,10 +67,10 @@
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['max']">Allocation percentage cannot exceed 100.</div>
       </div>
     </div>
-    
+    <!-- Buttons -->
     <div class="button-group">
-      <button type="submit" class="submit-button" [disabled]="addMemberForm.invalid">Add Member</button>
-      <button type="submit" class="cancel-button" [disabled]="!(addMemberForm.dirty && addMemberForm.touched)">Reset</button>
+      <button type="button" id="submitBtn" class="submit-button" (click)="onSubmit()" [disabled]="addMemberForm.invalid">Add Member</button>
+      <button type="button" id="cancelBtn" class="cancel-button" (click)="onReset()"[disabled]="!(addMemberForm.dirty && addMemberForm.touched)">Reset</button>
     </div>
   </form>
 </div>

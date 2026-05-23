@@ -1,49 +1,43 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
 import { MemberService } from '../../../shared/services/member.service';
 import { UserRoles } from '../../../shared/@config/user-roles';
 import { Skills } from '../../../shared/@config/skills';
-import { EmployeeUI } from '../../../shared/@models/employee-ui.model';
+import { EmployeeDetailsFormData } from '../../../shared/@models/employee-ui.model';
 import { AlertService } from '../../../shared/services/alert.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-member',
   templateUrl: './add-member.component.html',
   styleUrls: ['./add-member.component.scss'],
-  standalone: false
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddMemberComponent implements OnDestroy {
-  // private fb = inject(FormBuilder);
-  // private memberService = inject(MemberService);
-  // private alertService = inject(AlertService);
-  // private router = inject(Router);
-
+export class AddMemberComponent implements OnInit, OnDestroy {
   skillsOptions = Object.values(Skills);
-  userRoles = UserRoles;
-
   addMemberForm!: FormGroup;
+  destroy$ = new Subject<void>();
   
-constructor(private fb : FormBuilder, private memberService : MemberService, private alertService : AlertService, private router : Router) {
-  this.createForm();
-}
+  constructor(private fb: FormBuilder, private memberService: MemberService, private alertService: AlertService) {
+  }
 
-ngOnDestroy(): void {
-    this.alertService.hideAlert();
-}
-private createForm() {
-  this.addMemberForm = this.fb.group({
-    id: [{ value: 100000 + this.memberService.getMembersCount(), disabled: true }],
-    role: [{ value: UserRoles.Member, disabled: true }],
-    name: ['', [Validators.required]],
-    experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
-    skills: [[], [this.atLeastThreeSkillsValidator]],
-    profileDescription: ['', [Validators.maxLength(1000)]],
-    currentProjectStartDate: ['', [Validators.required]],
-    currentProjectEndDate: ['', [Validators.required]],
-    allocationPercentage: [0, [Validators.required, Validators.min(0), Validators.max(100)]]
-  });
-}
+  ngOnInit(): void {
+    this.createForm();
+  }
+
+  private createForm(): void {
+    this.addMemberForm = this.fb.group({
+      role: [{ value: UserRoles.Member, disabled: true }],
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+(?:[.'-][A-Za-z]+)*$/)]],
+      experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
+      skills: [[], [this.atLeastThreeSkillsValidator]],
+      profileDescription: ['', [Validators.minLength(10), Validators.maxLength(1000)]],
+      currentProjectStartDate: ['', [Validators.required]], // TODO : custom validator for Date
+      currentProjectEndDate: ['', [Validators.required]], // TODO : custom validator for Date
+      allocationPercentage: [0, [Validators.required, Validators.min(1), Validators.max(100)]]
+    });
+  }
 
   private atLeastThreeSkillsValidator(control: AbstractControl) {
     if (control.value && control.value.length >= 3) {
@@ -52,11 +46,14 @@ private createForm() {
     return { atLeastThree: true };
   }
 
+  trackByMemberSkill(index: number, skill: Skills): Skills {
+    return skill;
+  }
+
   onSubmit(): void {
     if (this.addMemberForm.valid) {
       const formValue = this.addMemberForm.getRawValue();
-      const newMember: EmployeeUI = {
-        id: formValue.id,
+      const newMember: EmployeeDetailsFormData = {
         role: formValue.role,
         name: formValue.name,
         experience: formValue.experience,
@@ -66,12 +63,30 @@ private createForm() {
         currentProjectEndDate: formValue.currentProjectEndDate,
         allocationPercentage: formValue.allocationPercentage
       };
-      console.log("newMember", newMember); 
-      this.memberService.addMember(newMember);
-      this.alertService.showAlert('Member added successfully!', 'success');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      this.createForm();
-      // this.router.navigate(['/home']);
+      this.memberService.addMember(newMember).pipe(takeUntil(this.destroy$)).subscribe(() => { 
+        this.onAddMemberSuccess(); 
+      });
     }
   }
+
+  onAddMemberSuccess() {
+    this.alertService.showAlert('Member added successfully!', 'success');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.onReset();
+  }
+
+  onReset(): void {
+    this.addMemberForm.reset({
+      role: UserRoles.Member,
+      experience: 0,
+      allocationPercentage: 0
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.alertService.hideAlert();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }
