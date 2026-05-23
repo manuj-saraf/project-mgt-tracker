@@ -1,4 +1,4 @@
-import { EmployeeAllocationUI, EmployeeUI } from "../@models/employee-ui.model";
+import { EmployeeAllocationUI, EmployeeIdentification, EmployeeUI } from "../@models/employee-ui.model";
 import { Employee } from "../@models/employee.model";
 
 const convertEmployeeToUIModel = (members: Employee[]): EmployeeUI[] => {
@@ -8,6 +8,15 @@ const convertEmployeeToUIModel = (members: Employee[]): EmployeeUI[] => {
             allocationPercentage: ((+member.allocationPercentage *10000)/100) as number
         }
     });
+}
+
+const getAllEmployeesIdsAndNames = (members: Employee[]): EmployeeIdentification[] => {
+    return members.map(member=> {
+        return {
+            id: member.id,
+            name: member.name
+        }
+    })
 }
 
 const getEmployeeUIToUpdateAllocation = (employee : Employee): EmployeeAllocationUI=> {
@@ -37,5 +46,6 @@ export const EmployeeMapper = {
     convertEmployeeToUIModel,
     getEmployeeUIToUpdateAllocation,
     updateEmployeeAllocationInfoToEmployee,
-    convertUIModelToEmployee
+    convertUIModelToEmployee,
+    getAllEmployeesIdsAndNames
 };0

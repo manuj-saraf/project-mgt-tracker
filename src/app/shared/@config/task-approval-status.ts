@@ -1,5 +1,5 @@
-export enum TaskApprovalStatus {
+export enum TaskStatus {
     Approved = 'Approved',
     Rejected = 'Rejected',
-    Pending = 'Pending'
+    Assigned = 'Assigned'
 }

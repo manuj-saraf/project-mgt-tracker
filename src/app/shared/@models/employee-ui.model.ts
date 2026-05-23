@@ -9,3 +9,5 @@ export interface EmployeeUI extends Omit<Employee, 'allocationPercentage'> {
 export interface EmployeeDetailsFormData extends Omit<EmployeeUI, 'id'>{}
 
 export interface EmployeeAllocationUI extends Pick<EmployeeUI, 'id' | 'name' | 'currentProjectEndDate' | 'allocationPercentage' >{}
+
+export interface EmployeeIdentification extends Pick<EmployeeUI, 'id' | 'name'>{}

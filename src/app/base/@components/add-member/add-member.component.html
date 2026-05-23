@@ -63,7 +63,7 @@
       <input type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100">
       <div *ngIf="addMemberForm.get('allocationPercentage')?.invalid && addMemberForm.get('allocationPercentage')?.touched" class="error">
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['required']">Allocation percentage is required.</div>
-        <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['min']">Allocation percentage must be at least 0.</div>
+        <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['min']">Allocation percentage must be greater than 0.</div>
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['max']">Allocation percentage cannot exceed 100.</div>
       </div>
     </div>

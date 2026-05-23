@@ -1,1 +1,68 @@
-<p>assign-task works!</p>
+<div class="assign-task-container">
+    <h2> Assign Task </h2>
+    <div class="error">No team members available. Please add members first.</div>
+    <form [formGroup]="taskFormGroup">
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" formControlName="title">
+            <div *ngIf="taskFormGroup.get('title')?.invalid && taskFormGroup.get('title')?.touched" class="error">
+                <div *ngIf="taskFormGroup.get('title')?.errors?.['required']">Task title is required.</div>
+                <div *ngIf="taskFormGroup.get('title')?.errors?.['maxlength']">Task title cannot exceed 100 characters.</div>
+            </div>
+        </div>
+        
+        <!-- Task Delivereables -->
+        <div class="form-group">
+            <div class="form-group">
+                <label for="deliverables">Task Deliverables</label>
+                <input type="text" id="deliverables" formControlName="deliverables">
+                <div *ngIf="taskFormGroup.get('deliverables')?.invalid && taskFormGroup.get('deliverables')?.touched" class="error">
+                    <div *ngIf="taskFormGroup.get('deliverables')?.errors?.['required']">Task Deliverables is required.</div>
+                    <div *ngIf="taskFormGroup.get('deliverables')?.errors?.['minlength']">Task Deliverables must be atleast 10 characters.</div>
+                    <div *ngIf="taskFormGroup.get('deliverables')?.errors?.['maxlength']">Task Deliverables cannot exceed 1000 characters.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assign To -->
+        <div class="form-group">
+            <label for="assignedTo">Assigned To</label>
+            <select id="assignedTo" formControlName="assignedTo">
+                <option value="" disabled selected>Select Member</option>
+                <option [value]="member.id" *ngFor="let member of memberList;trackBy: trackByMemberId" >{{member.name}} ({{member.id}})</option>
+            </select>
+            <div *ngIf="taskFormGroup.get('assignedTo')?.invalid && taskFormGroup.get('assignedTo')?.touched" class="error">
+                Please select a member
+            </div>
+        </div>
+        
+        <!-- Task Start Date -->
+        <div class="form-group">
+            <label for="taskStartDate">Task Start Date</label>
+            <input type="date" id="taskStartDate" formControlName="taskStartDate">
+            <div *ngIf="taskFormGroup.get('taskStartDate')?.invalid && taskFormGroup.get('taskStartDate')?.touched"
+                class="error">
+                <div *ngIf="taskFormGroup.get('taskStartDate')?.errors?.['required']">Task Start date is required.</div>
+                <div *ngIf="taskFormGroup.get('taskStartDate')?.errors?.['dateOrder']">Task Start date must be smaller than
+                    End date.</div>
+            </div>
+        </div>
+        
+        <!-- Task End Date -->
+        <div class="form-group">
+            <label for="taskEndDate">Current Project End Date:</label>
+            <input type="date" id="taskEndDate" formControlName="taskEndDate">
+            <div *ngIf="taskFormGroup.get('taskEndDate')?.invalid && taskFormGroup.get('taskEndDate')?.touched" class="error">
+                <div *ngIf="taskFormGroup.get('taskEndDate')?.errors?.['required']">Task End date is required.</div>
+                <div *ngIf="taskFormGroup.get('taskEndDate')?.errors?.['dateOrder']">Task End date must be greater than Start
+                    date.</div>
+            </div>
+        </div>
+    </form>
+    <!-- Buttons -->
+    <div class="button-group">
+        <button type="button" id="submitBtn" class="submit-button" (click)="onSubmit()" [disabled]="taskFormGroup.invalid">Add Member</button>
+        <button type="button" id="cancelBtn" class="cancel-button" (click)="onReset()"[disabled]="!(taskFormGroup.dirty && taskFormGroup.touched)">Reset</button>
+    </div>
+</div>

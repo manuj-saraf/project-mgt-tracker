@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { defaultEmployees } from '../@config/employees';
 import { Employee } from '../@models/employee.model';
-import { EmployeeAllocationUI, EmployeeDetailsFormData, EmployeeUI } from '../@models/employee-ui.model';
+import { EmployeeAllocationUI, EmployeeDetailsFormData, EmployeeIdentification, EmployeeUI } from '../@models/employee-ui.model';
 import { EmployeeMapper } from '../@mappers/member-mapper';
 import { UserRoles } from '../@config/user-roles';
 
@@ -23,9 +23,14 @@ export class MemberService {
     return EmployeeMapper.convertEmployeeToUIModel(this.membersList.value);
   }
 
-  getAllMembers(){
+  getAllMembers(): Observable<EmployeeUI[]>{
     const members = this.membersList.value.filter(emp=> emp.role === UserRoles.Member);
     return of(EmployeeMapper.convertEmployeeToUIModel(members));
+  }
+
+  getAllMemberIdsAndNames(): Observable<EmployeeIdentification[]> {
+    const members = this.membersList.value.filter(emp=> emp.role === UserRoles.Member);
+    return of(EmployeeMapper.getAllEmployeesIdsAndNames(members));
   }
 
   getMembersCount(): number {
@@ -64,7 +69,7 @@ export class MemberService {
     this.membersList.next([...currentMembers, emp]);
     return of({message : "Member added successfully"});
   }
-  
+
   updateMember(updatedMember: EmployeeAllocationUI): Observable<{message: string}> {
     const currentMembers = this.membersList.value;
     const index = currentMembers.findIndex(m => m.id === updatedMember.id);
