@@ -5,7 +5,8 @@ import { UserRoles } from '../../../shared/@config/user-roles';
 import { Skills } from '../../../shared/@config/skills';
 import { EmployeeDetailsFormData } from '../../../shared/@models/employee-ui.model';
 import { AlertService } from '../../../shared/services/alert.service';
-import { Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { dateAfterValidator, dateBeforeValidator } from 'src/app/shared/validators/date.validators';
 
 @Component({
   selector: 'app-add-member',
@@ -33,9 +34,18 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
       skills: [[], [this.atLeastThreeSkillsValidator]],
       profileDescription: ['', [Validators.minLength(10), Validators.maxLength(1000)]],
-      currentProjectStartDate: ['', [Validators.required]], // TODO : custom validator for Date
-      currentProjectEndDate: ['', [Validators.required]], // TODO : custom validator for Date
+      currentProjectStartDate: ['', [Validators.required, dateBeforeValidator('currentProjectEndDate')]],
+      currentProjectEndDate: ['', [Validators.required, dateAfterValidator('currentProjectStartDate')]], 
       allocationPercentage: [0, [Validators.required, Validators.min(1), Validators.max(100)]]
+    });
+
+    const dependentControls = [this.addMemberForm.get('currentProjectStartDate'), this.addMemberForm.get('currentProjectEndDate')];
+    dependentControls.forEach(control=> {
+      control?.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(()=>{
+        dependentControls.forEach(ctrl=> {
+          ctrl?.updateValueAndValidity({emitEvent: false});
+        })
+      });
     });
   }
 

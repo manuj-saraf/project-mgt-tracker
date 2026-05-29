@@ -1,1 +1,81 @@
-<p>approve-task works!</p>
+<div class="approve-task-container">
+    <div class="select-member-container">
+        <h2>Approve Task </h2>  
+        
+        <form [formGroup]="memberFormGroup" *ngIf="memberList?.length">
+            <div class="form-group">
+                <label for="member">Select Team Member</label>
+                <select id="member" formControlName="member">
+                    <option value="" disabled selected>Select Member</option>
+                    <option [value]="member.id" *ngFor="let member of memberList;trackBy: trackByMemberId" >{{member.name}} - ({{member.id}})</option>
+                </select>
+                <div *ngIf="memberFormGroup.get('member')?.invalid && memberFormGroup.get('member')?.touched" class="error">
+                    Please select a member
+                </div>
+            </div>
+        </form>
+
+        <div class="error" *ngIf="(errorMsg$ | async) as errorMsg;"> {{errorMsg}} </div> 
+    </div>   
+    <div class="taskList-container">
+        <!-- Pending Task info -->
+        <div *ngIf="selectedMember && pendingTasks.length">
+            <ng-container *ngTemplateOutlet="taskDetails; context:{taskList:pendingTasks, showCheckbox: true }">
+            </ng-container>
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="button" id="submitBtn" class="submit-button" (click)="updateTaskApproval(taskStatus.Approved)" [disabled]="isActionDisabled()">Accept</button>
+                <button type="button" id="cancelBtn" class="cancel-button" (click)="updateTaskApproval(taskStatus.Rejected)"[disabled]="isActionDisabled()">Reject</button>
+            </div>
+        </div>
+        <br/>
+        <!-- Approved / Rejected Task info -->
+        <div *ngIf="selectedMember && approvedOrRejectedTasks.length">
+            <ng-container *ngTemplateOutlet="taskDetails; context:{taskList:approvedOrRejectedTasks  , showCheckbox: false }">
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<!-- Reused template for tasks --> 
+<ng-template #taskDetails let-taskList="taskList" let-showCheckbox="showCheckbox">
+    
+    <div class="tableWrapper">
+        <table class="tasks-table">
+            <thead>
+                <tr class="bottomBorder">
+                    <th></th>
+                    <th>Task Title</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Task Details</th>
+                    <th>Approval Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- TODO trackBy-->
+                <tr *ngFor="let task of taskList; let i = index;" class="bottomBorder">
+                    <td class="maxWid50">
+                        <input type="checkbox" *ngIf="showCheckbox" (change)="toggleTaskSelection($event, task.id)" />
+                        <span *ngIf="!showCheckbox">{{i+1}}</span>
+                    </td>
+                    <td class="maxWid200 taskTitle" title={{task.title}}> {{task.title}} </td>
+                    <td class="maxWid100"> {{task.taskStartDate  | date: 'dd/MM/YYYY'}} </td>
+                    <td class="maxWid100"> {{task.taskEndDate | date: 'dd/MM/YYYY'}}</td>
+                    <td class="maxWid400"> {{task.deliverables}}</td>
+                    <td class="maxWid200">
+                        <div *ngIf="task.approvalHistory?.length; else noApprover">
+                            <div *ngFor="let approval of task.approvalHistory">
+                                {{ approval.approverName }} ({{ approval.approvalRole}}) - {{approval.approvalStatus}} on {{ approval.approvalDate | date:'short'}}
+                            </div>
+                        </div>
+                        <ng-template #noApprover>
+                            <div *ngIf="showCheckbox">No approvals yet</div>
+                        </ng-template>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

@@ -1,7 +1,7 @@
 <div class="assign-task-container">
     <h2> Assign Task </h2>
-    <div class="error">No team members available. Please add members first.</div>
-    <form [formGroup]="taskFormGroup">
+    <div *ngIf="!memberList?.length" class="error textCenter">No team members available. Please add members first.</div>
+    <form [formGroup]="taskFormGroup" *ngIf="memberList?.length">
         <!-- Title -->
         <div class="form-group">
             <label for="title">Task Title</label>
@@ -30,7 +30,7 @@
             <label for="assignedTo">Assigned To</label>
             <select id="assignedTo" formControlName="assignedTo">
                 <option value="" disabled selected>Select Member</option>
-                <option [value]="member.id" *ngFor="let member of memberList;trackBy: trackByMemberId" >{{member.name}} ({{member.id}})</option>
+                <option [value]="member.id" *ngFor="let member of memberList;trackBy: trackByMemberId" >{{member.name}} - ({{member.id}})</option>
             </select>
             <div *ngIf="taskFormGroup.get('assignedTo')?.invalid && taskFormGroup.get('assignedTo')?.touched" class="error">
                 Please select a member
@@ -61,8 +61,8 @@
         </div>
     </form>
     <!-- Buttons -->
-    <div class="button-group">
-        <button type="button" id="submitBtn" class="submit-button" (click)="onSubmit()" [disabled]="taskFormGroup.invalid">Add Member</button>
+    <div class="button-group" *ngIf="memberList?.length">
+        <button type="button" id="submitBtn" class="submit-button" (click)="onSubmit()" [disabled]="taskFormGroup.invalid">Add Task</button>
         <button type="button" id="cancelBtn" class="cancel-button" (click)="onReset()"[disabled]="!(taskFormGroup.dirty && taskFormGroup.touched)">Reset</button>
     </div>
 </div>
