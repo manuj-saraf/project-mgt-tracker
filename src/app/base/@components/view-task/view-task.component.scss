@@ -1,0 +1,23 @@
+@use '../../../../styles'as *;
+@use '../../../../colors'as *;
+
+
+.view-task-container {
+
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+}  
+
+.selected-member-details{
+    display: flex;
+    gap: 1rem;
+    .userName{
+        font-weight: 500;
+    }
+    .userInfo{
+        display: flex;
+        gap: 2rem;
+        
+    }
+}

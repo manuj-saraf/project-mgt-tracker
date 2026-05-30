@@ -1,5 +1,8 @@
-import { EmployeeAllocationUI, EmployeeIdentification, EmployeeUI } from "../@models/employee-ui.model";
+import { defaultEmployees } from "../@config/employees";
+import { EmployeeAllocationUI, EmployeeIdentification, EmployeeSelfAndTaskDetails, EmployeeUI } from "../@models/employee-ui.model";
 import { Employee } from "../@models/employee.model";
+import { TaskApprovalPendingDetails } from "../@models/task-approval.model";
+import { TaskApprovalDetails, TaskDetails } from "../@models/task-details.model";
 
 const convertEmployeeToUIModel = (members: Employee[]): EmployeeUI[] => {
     return members.map(member => {
@@ -42,10 +45,32 @@ const convertUIModelToEmployee = (member: EmployeeUI): Employee => {
     };
 }
 
+const getPendingEmpTasksAndOtherDetails = (emp: EmployeeUI, taskList : TaskDetails[]): EmployeeSelfAndTaskDetails => {
+    const { id, name, currentProjectStartDate, currentProjectEndDate, allocationPercentage} = emp;
+    
+    const taskDetails: TaskApprovalDetails[] = [...taskList].map(task=> {
+        const res = defaultEmployees.map(mgr=> {
+            const {role, name} = mgr;
+            let approvalStatus = 'Pending';
+            let approvalDate = '';
+            const approvedInfo  = task.approvalHistory.find(a => a.approverName === mgr.name);
+            if(approvedInfo){
+                approvalDate = approvedInfo.approvalDate;
+                approvalStatus = approvedInfo.approvalStatus as string;
+            }
+            return {role, name, approvalStatus, approvalDate } as TaskApprovalPendingDetails;
+        });
+        const {approvalHistory, ...remaingTaskInfo} = task;
+        return {...remaingTaskInfo, pendingApprovals : res};
+    });
+    return {id, name, currentProjectStartDate, currentProjectEndDate, allocationPercentage, taskDetails}
+}
+
 export const EmployeeMapper = {
     convertEmployeeToUIModel,
     getEmployeeUIToUpdateAllocation,
     updateEmployeeAllocationInfoToEmployee,
     convertUIModelToEmployee,
-    getAllEmployeesIdsAndNames
-};0
+    getAllEmployeesIdsAndNames,
+    getPendingEmpTasksAndOtherDetails
+};

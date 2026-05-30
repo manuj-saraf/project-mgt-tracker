@@ -7,3 +7,11 @@ export interface TaskApproval{
     approvalDate: string;
     approvalStatus: TaskStatus;
 }
+
+
+export interface TaskApprovalPendingDetails {
+    role: UserRoles, 
+    name : string, 
+    approvalStatus: string, 
+    approvalDate: string
+}

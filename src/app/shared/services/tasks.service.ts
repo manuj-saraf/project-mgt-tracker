@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { filter, Observable, of, switchMap, throwError } from 'rxjs';
 import { Employee } from '../@models/employee.model';
-import { EmployeeUI } from '../@models/employee-ui.model';
+import { EmployeeSelfAndTaskDetails, EmployeeUI } from '../@models/employee-ui.model';
 import { TaskDetails, TaskDetailsFormData } from '../@models/task-details.model';
 import { TaskApproval } from '../@models/task-approval.model';
 import { MemberService } from './member.service';
 import { TaskStatus } from '../@config/task-approval-status';
+import { EmployeeMapper } from '../@mappers/member-mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,15 @@ export class TasksService {
     return of(pendingEmpTaskList);
   }
 
+  getPendingTasksForLoggedInEmployee(employeeId: number): Observable<EmployeeSelfAndTaskDetails> {
+    const pendingEmpTaskList = (this.taskData[employeeId] || ([] as TaskDetails[])).filter(task => task.status === TaskStatus.Assigned);
+    return this.memberService.getMemberById(employeeId).pipe(
+      filter(m => !!m),
+      switchMap((member: EmployeeUI) => {
+        const finalData = EmployeeMapper.getPendingEmpTasksAndOtherDetails(member, pendingEmpTaskList);
+        return of(finalData);
+      }));
+  }
 
   updateTaskApproval(empId: Employee['id'], taskIds: number[], approval: TaskApproval): Observable<{ message: string } | null> {
     const empTaskList = this.taskData[empId];

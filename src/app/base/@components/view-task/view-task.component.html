@@ -1,1 +1,48 @@
-<p>view-task works!</p>
+<div class="card container view-task-container">
+    <h2>View Assigned Tasks </h2>   
+
+    <div class="selected-member-details mb-3">
+        <div class="userName">Details of {{ currentUserData.name }} ( {{currentUserData.id}} ) :-</div>
+        <div class="userInfo">
+            <div> Project Start date : {{currentUserData.currentProjectStartDate | date: 'dd/MM/YYYY'}}</div>
+            <div> Project End date : {{currentUserData.currentProjectEndDate | date: 'dd/MM/YYYY'}}</div>
+            <div> Allocation : {{ currentUserData.allocationPercentage }}% </div>
+        </div>
+    </div>
+
+    <div class="error mb-3" *ngIf="taskDetails.length === 0"> No Active Tasks. Contact your manager. </div> 
+
+    <table class="table tasks-table" *ngIf="taskDetails.length > 0">
+        <thead>
+            <tr class="bottomBorder">
+                <th></th>
+                <th>Task Title</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Task Details</th>
+                <th>Approval Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- TODO trackBy-->
+            <tr *ngFor="let task of taskDetails; let i = index;" class="bottomBorder">
+                <td class="maxWid50">                    
+                    <span>{{i+1}}</span>
+                </td>
+                <td class="maxWid200 taskTitle" title={{task.title}}> {{task.title}} </td>
+                <td class="maxWid100"> {{task.taskStartDate  | date: 'dd/MM/YYYY'}} </td>
+                <td class="maxWid100"> {{task.taskEndDate | date: 'dd/MM/YYYY'}}</td>
+                <td class="maxWid400"> {{task.deliverables}}</td>
+                <td class="maxWid200">
+                    <!-- TODO : trackBy -->
+                    <div *ngFor="let approval of task.pendingApprovals; let i = index;">
+                        <ul>
+                            <li *ngIf="approval.approvalStatus === 'Pending'">{{ approval.name }}  ( {{approval.role }} ) - {{approval.approvalStatus}}</li>
+                            <li *ngIf="approval.approvalStatus !== 'Pending'">{{ approval.name }}  ( {{approval.role }} ) - {{approval.approvalStatus}} on {{ approval.approvalDate | date: 'dd/MM/YYYY' }} </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

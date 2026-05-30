@@ -19,9 +19,6 @@ export class MemberService {
   constructor() {
   }
 
-  getMembers(): EmployeeUI[] {
-    return EmployeeMapper.convertEmployeeToUIModel(this.membersList.value);
-  }
 
   getAllMembers(): Observable<EmployeeUI[]>{
     const members = this.membersList.value.filter(emp=> emp.role === UserRoles.Member);
@@ -33,9 +30,6 @@ export class MemberService {
     return of(EmployeeMapper.getAllEmployeesIdsAndNames(members));
   }
 
-  getMembersCount(): number {
-    return this.membersList.value.length;
-  }
 
   getCurrentMemberId(): number {
     return 100000 + this.membersList.value.length;
