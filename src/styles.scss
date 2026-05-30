@@ -1,24 +1,17 @@
 @use './colors' as *;
 
+@import "bootstrap/dist/css/bootstrap.min.css";
+
 h2 {
   text-align: center;
   margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
 }
 
 
 input,
 select,
 textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid $light-gray;
-  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.35) !important;
   box-sizing: border-box;
   &:focus{
       outline:none;
@@ -45,49 +38,26 @@ select[multiple] {
 }
 
 
-.submit-button, .cancel-button {
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  background-color: $light-blue;
-  color: $white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight:600;
-  cursor:pointer;
-  text-transform: uppercase;
-
-  &:disabled {
-    background-color: $light-gray;
-    cursor: not-allowed;
+.invalid-feedback{
+    &.display-invalid-error{
+      display:block;
+    }
   }
   
-  &:hover:not(:disabled) {
-    opacity:0.8;
-  }
+.btn-primary, .btn-secondary, .btn-reject, .btn-danger {
+    width: 100%;
 }
 
-.cancel-button{
-    background-color: $orange;
-}
 
 .button-group{
     display:flex;
     justify-content: space-between;
     gap:0.5rem;
-    .submit-button, .cancel-button{
-        flex:1 1 0;
+    .btn-primary, .btn-secondary, .btn-reject, .btn-danger{
+        flex:1 1 0 !important;
     }
 }
 
-.form-label{
-    display:block;
-    font-size: 1rem;
-    font-weight: 600;
-    color:$dark-gray;
-    margin-bottom:0.5rem;
-}
 
 .textLeft {
   text-align: left;
@@ -99,6 +69,13 @@ select[multiple] {
 
 .mt15{
     margin-top: 15px;
+}
+
+$max-widths: 50, 100, 200, 300, 400, 600;
+@each $width in $max-widths {
+    .maxWid#{$width} {
+        max-width: $width * 1px;
+    }
 }
 
 @media screen and (max-width: 768px){

@@ -1,17 +1,17 @@
-<div class="update-allocation-container">
-    <h2> Update Team Allocation</h2>    <!-- Select member for Updation -->
+<div class="card container update-allocation-container">
+    <h2> Update Team Member Allocation</h2>    <!-- Select member for Updation -->
     <div>
         <form [formGroup]="memberForm">
-            <label for="member"> Enter Team member id: </label>
-            <input type="text" id="member" formControlName="member" class="form-input" 
+            <label class="form-label" for="member"> Enter Team member id: </label>
+            <input type="text" id="member" formControlName="member" class="form-control form-input" autocomplete="off"
                 placeholder="Enter 6-digit User ID" maxlength="6" pattern="[0-9]*" inputmode="numeric" >
                 <!-- Error Messages -->
-            <div class="error" *ngIf="memberForm.get('member')?.invalid && memberForm.get('member')?.touched">
+            <div class="invalid-feedback" [ngClass]="{'display-invalid-error': memberForm.get('member')?.invalid && memberForm.get('member')?.touched }">
                 <span *ngIf="memberForm.get('member')?.errors?.['required']">User ID is required</span>
                 <span *ngIf="memberForm.get('member')?.errors?.['pattern']">User ID must contain only numbers</span>
                 <span *ngIf="memberForm.get('member')?.errors?.['invalidUserId']">User ID does not Exist</span>
             </div>
-            <button type="button" id="fetchMemberBtn" class="submit-button mt15" (click)="onFetchMemberDetails()" [disabled]="memberForm.invalid">Submit</button>
+            <button type="button" id="fetchMemberBtn" class="btn btn-primary mt15" (click)="onFetchMemberDetails()" [disabled]="memberForm.invalid">Submit</button>
         </form>        
     </div>
     <!-- Update Allocation -->
@@ -21,17 +21,17 @@
         </div>
         
         <form [formGroup]="allocationForm">
-            <div class="fieldWrapper">
-                <label class="width50Percent" for="currentProjectEndDate">Current Project End Date:</label>
-                <input class="width50Percent" type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate" />
+            <div class="form-group mb-3">
+                <label class="form-label" for="currentProjectEndDate">Current Project End Date:</label>
+                <input class="form-control" type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate" />
             </div>
-            <div class="fieldWrapper mt15">
-                <label class="width50Percent" for="allocationPercentage">New Allocation Percentage:</label>
-                <input class="width50Percent" type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100" />
+            <div class="form-group mb-3">
+                <label class="form-label" for="allocationPercentage">New Allocation Percentage:</label>
+                <input class="form-control" type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100" />
             </div>
             <div class="button-group mt15">
-                <button type="button" id="saveBtn" class="cancel-button" (click)="onSave()" [disabled]="saveDisabled">Save</button>
-                <button type="button" id="cancelBtn" class="submit-button" (click)="onReset()">Reset</button>
+                <button type="button" id="saveBtn" class="btn btn-primary" (click)="onSave()" [disabled]="saveDisabled">Save</button>
+                <button type="button" id="cancelBtn" class="btn btn-secondary" (click)="onReset()">Reset</button>
             </div>
         </form>
         </ng-container>

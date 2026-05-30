@@ -3,20 +3,25 @@
 
 .approve-task-container {
 
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
-  background: $very-light-gray;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
 
   .select-member-container {
-    max-width: 600px;
+    width: 600px;
     margin: 0 auto;
     padding: 20px;
   }
   .taskList-container{
       overflow-x: auto;
   }
+}
+
+.button-group{
+    width:600px;
+    max-width:600px;
+    margin:0 auto;
 }
 
 .bottomBorder {
@@ -29,21 +34,6 @@
   text-overflow: ellipsis;
 }
 
-.maxWid50{
-    max-width: 50px;
-}
-
-.maxWid100 {
-  max-width: 100px;
-}
-
-.maxWid200 {
-  max-width: 200px;
-}
-
-.maxWid400 {
-  max-width: 400px;
-}
 
 table {
   width: 90%;
@@ -68,11 +58,4 @@ td {
     padding: 0.4rem;
   }
 
-  // th:nth-child(5), td:nth-child(5) {
-  //     max-width: 120px;
-  // }
-
-  // th:nth-child(6), td:nth-child(6) {
-  //     max-width: 180px;
-  // }
 }

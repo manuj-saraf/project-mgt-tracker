@@ -1,67 +1,69 @@
-<div class="add-member-container">
+<div class="card container">
   <h2>Add New Member</h2>
   <form [formGroup]="addMemberForm">
     <!-- Name-->
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" id="name" formControlName="name" autocomplete="off">
-      <div *ngIf="addMemberForm.get('name')?.invalid && addMemberForm.get('name')?.touched" class="error">
+    <div class="form-group mb-3">
+      <label class="form-label" for="name">Name:</label>
+      <input type="text" id="name" class="form-control"  formControlName="name" autocomplete="off">
+      <div class="invalid-feedback " [ngClass]="{'display-invalid-error': addMemberForm.get('name')?.invalid && addMemberForm.get('name')?.touched }">
         <div *ngIf="addMemberForm.get('name')?.errors?.['required']">Name is required.</div>
         <div *ngIf="addMemberForm.get('name')?.errors?.['pattern']">Please enter a valid name</div>
       </div>
     </div>
     <!-- Experience -->
-    <div class="form-group">
-      <label for="experience">Experience (years):</label>
-      <input type="number" id="experience" formControlName="experience" min="0" max="40">
-      <div *ngIf="addMemberForm.get('experience')?.invalid && addMemberForm.get('experience')?.touched" class="error">
+    <div class="form-group mb-3">
+      <label class="form-label" for="experience">Experience (years):</label>
+      <input type="number" id="experience" class="form-control" formControlName="experience" min="0" max="40">
+      <div class="invalid-feedback " [ngClass]="{'display-invalid-error': addMemberForm.get('experience')?.invalid && addMemberForm.get('experience')?.touched }">
         <div *ngIf="addMemberForm.get('experience')?.errors?.['required']">Experience is required.</div>
         <div *ngIf="addMemberForm.get('experience')?.errors?.['min']">Experience must be at least 4 years to get added to team.</div>
         <div *ngIf="addMemberForm.get('experience')?.errors?.['max']">Experience cannot exceed 40 years.</div>
       </div>
     </div>
     <!-- Skills -->
-    <div class="form-group">
-      <label for="skills">Skills (select at least 3):</label>
-      <select id="skills" formControlName="skills" multiple>
+    <div class="form-group mb-3">
+      <label class="form-label" for="skills">Skills (select at least 3):</label>
+      <select id="skills" class="form-select" formControlName="skills" multiple>
         <option *ngFor="let skill of skillsOptions; trackBy: trackByMemberSkill" [value]="skill">{{ skill }}</option>
       </select>
-      <div *ngIf="addMemberForm.get('skills')?.invalid && addMemberForm.get('skills')?.touched" class="error">
+      <div class="invalid-feedback" [ngClass]="{'display-invalid-error': addMemberForm.get('skills')?.invalid && addMemberForm.get('skills')?.touched }">
         Please select at least 3 skills.
       </div>
     </div>
+    
     <!-- Profile Description -->
-    <div class="form-group">
-      <label for="profileDescription">Profile Description:</label>
-      <textarea id="profileDescription" formControlName="profileDescription" maxlength="1000"></textarea>
-      <div *ngIf="addMemberForm.get('profileDescription')?.invalid && addMemberForm.get('profileDescription')?.touched" class="error">
+    <div class="form-group mb-3">
+      <label class="form-label" for="profileDescription">Profile Description:</label>
+      <textarea id="profileDescription" class="form-control" formControlName="profileDescription" maxlength="1000"></textarea>
+        <div class="invalid-feedback" [ngClass]="{'display-invalid-error': addMemberForm.get('profileDescription')?.invalid && addMemberForm.get('profileDescription')?.touched }">
+          <div *ngIf="addMemberForm.get('profileDescription')?.errors?.['required']">Profile description is required.</div>
         <div *ngIf="addMemberForm.get('profileDescription')?.errors?.['minlength']">Profile description must be atleast 10 characters.</div>
         <div *ngIf="addMemberForm.get('profileDescription')?.errors?.['maxlength']">Profile description cannot exceed 1000 characters.</div>        
       </div>
     </div>
     <!-- Project Start Date -->
-    <div class="form-group">
-      <label for="currentProjectStartDate">Current Project Start Date:</label>
-      <input type="date" id="currentProjectStartDate" formControlName="currentProjectStartDate">
-      <div *ngIf="addMemberForm.get('currentProjectStartDate')?.invalid && addMemberForm.get('currentProjectStartDate')?.touched" class="error">
+    <div class="form-group mb-3">
+      <label class="form-label" for="currentProjectStartDate">Current Project Start Date:</label>
+      <input type="date" class="form-control" id="currentProjectStartDate"  formControlName="currentProjectStartDate">
+      <div class="invalid-feedback" [ngClass]="{'display-invalid-error': addMemberForm.get('currentProjectStartDate')?.invalid && addMemberForm.get('currentProjectStartDate')?.touched }">
         <div *ngIf="addMemberForm.get('currentProjectStartDate')?.errors?.['required']">Start date is required.</div>
         <div *ngIf="addMemberForm.get('currentProjectStartDate')?.errors?.['dateOrder']">Start date must be smaller than End date.</div> 
       </div>
     </div>
     <!-- Project End Date -->
-    <div class="form-group">
-      <label for="currentProjectEndDate">Current Project End Date:</label>
-      <input type="date" id="currentProjectEndDate" formControlName="currentProjectEndDate">
-      <div *ngIf="addMemberForm.get('currentProjectEndDate')?.invalid && addMemberForm.get('currentProjectEndDate')?.touched" class="error">
+    <div class="mb-3">
+      <label class="form-label" for="currentProjectEndDate">Current Project End Date:</label>
+      <input type="date" class="form-control" id="currentProjectEndDate" formControlName="currentProjectEndDate">
+      <div class="invalid-feedback" [ngClass]="{'display-invalid-error': addMemberForm.get('currentProjectEndDate')?.invalid && addMemberForm.get('currentProjectEndDate')?.touched }">
         <div *ngIf="addMemberForm.get('currentProjectEndDate')?.errors?.['required']">End date is required.</div>
         <div *ngIf="addMemberForm.get('currentProjectEndDate')?.errors?.['dateOrder']">End date must be greater than Start date.</div> 
       </div>
     </div>
     <!-- Allocation Percentage -->
-    <div class="form-group">
-      <label for="allocationPercentage">Allocation Percentage:</label>
-      <input type="number" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100">
-      <div *ngIf="addMemberForm.get('allocationPercentage')?.invalid && addMemberForm.get('allocationPercentage')?.touched" class="error">
+    <div class="form-group mb-3">
+      <label class="form-label" for="allocationPercentage">Allocation Percentage:</label>
+      <input type="number" class="form-control" id="allocationPercentage" formControlName="allocationPercentage" min="0" max="100">
+      <div class="invalid-feedback" [ngClass]="{'display-invalid-error': addMemberForm.get('allocationPercentage')?.invalid && addMemberForm.get('allocationPercentage')?.touched }">
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['required']">Allocation percentage is required.</div>
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['min']">Allocation percentage must be greater than 0.</div>
         <div *ngIf="addMemberForm.get('allocationPercentage')?.errors?.['max']">Allocation percentage cannot exceed 100.</div>
@@ -69,8 +71,8 @@
     </div>
     <!-- Buttons -->
     <div class="button-group">
-      <button type="button" id="submitBtn" class="submit-button" (click)="onSubmit()" [disabled]="addMemberForm.invalid">Add Member</button>
-      <button type="button" id="cancelBtn" class="cancel-button" (click)="onReset()"[disabled]="!(addMemberForm.dirty && addMemberForm.touched)">Reset</button>
+      <button type="button" id="submitBtn" class="btn btn-primary" (click)="onSubmit()" [disabled]="addMemberForm.invalid">Add Member</button>
+      <button type="button" id="cancelBtn" class="btn btn-secondary" (click)="onReset()"[disabled]="!(addMemberForm.dirty && addMemberForm.touched)">Reset</button>
     </div>
   </form>
 </div>

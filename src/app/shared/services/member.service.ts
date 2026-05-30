@@ -38,7 +38,7 @@ export class MemberService {
   }
 
   getCurrentMemberId(): number {
-    return 10000 + this.membersList.value.length;
+    return 100000 + this.membersList.value.length;
   }
 
   getMemberById(id: number): Observable<EmployeeUI> {

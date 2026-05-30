@@ -1,28 +1,30 @@
-<ng-container *ngIf="alertService.alert$ | async as alertMessageData">
-  
-  <div *ngIf="alertMessageData.type === 'success'" class="alert alert-success" role="alert">
-    <span >{{ alertMessageData.message }} </span>
-    <span (click)="alertService.hideAlert()" class="close">&times;</span>
-  </div>
-  
-  <div *ngIf="alertMessageData.type === 'error'" class="alert alert-danger" role="alert">
-    <span >{{ alertMessageData.message }} </span>
-    <span (click)="alertService.hideAlert()" class="close">&times;</span>
-  </div>
+<div class="content container">
+  <ng-container *ngIf="alertService.alert$ | async as alertMessageData">
 
-</ng-container>
+    <div *ngIf="alertMessageData.type === 'success'" class="alert alert-success alert-dismissable" role="alert">
+      <span>{{ alertMessageData.message }} </span>
+      <a href="#" (click)="alertService.hideAlert()" class="close">&times;</a>
+    </div>
 
-<app-header></app-header>
-<div class="base-container" *ngIf="!hasChildRoute">
-  <div class="welcome-section">
-    <h2>Welcome to Project Management Tracker</h2>
-    <p>Manage your projects and team members efficiently</p>
-    <div class="feature-cards">
-      <div class="card" *ngFor="let item of navigationLinks; trackBy:trackByFn" (click)="navigate(item.route)">
-        <h3>{{ item.label }}</h3>
-        <p>{{ item.description }}</p>
+    <div *ngIf="alertMessageData.type === 'error'" class="alert alert-danger alert-dismissable" role="alert">
+      <span>{{ alertMessageData.message }} </span>
+      <a href="#" (click)="alertService.hideAlert()" class="close">&times;</a>
+    </div>
+
+  </ng-container>
+
+  <app-header></app-header>
+  <div class="base-container" *ngIf="!hasChildRoute">
+    <div class="welcome-section">
+      <h2>Welcome to Project Management Tracker</h2>
+      <p>Manage your projects and team members efficiently</p>
+      <div class="feature-cards">
+        <div class="card" *ngFor="let item of navigationLinks; trackBy:trackByFn" (click)="navigate(item.route)">
+          <h3>{{ item.label }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
       </div>
     </div>
   </div>
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>

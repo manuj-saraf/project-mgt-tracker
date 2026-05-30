@@ -75,6 +75,7 @@ export class ApproveTaskComponent implements OnInit, OnDestroy{
     this.selectedMember = this.memberList.find(m => m.id === id) ?? null;
     this.pendingTasks = [];
     this.approvedOrRejectedTasks = [];
+    this.selectedTaskIds.clear();
     this.errorMsg$.next('');
     if(this.selectedMember){
       this.fetchTasksByEmployeeId(this.selectedMember.id);

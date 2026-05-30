@@ -33,7 +33,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+(?:[.'-][A-Za-z]+)*$/)]],
       experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
       skills: [[], [this.atLeastThreeSkillsValidator]],
-      profileDescription: ['', [Validators.minLength(10), Validators.maxLength(1000)]],
+      profileDescription: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       currentProjectStartDate: ['', [Validators.required, dateBeforeValidator('currentProjectEndDate')]],
       currentProjectEndDate: ['', [Validators.required, dateAfterValidator('currentProjectStartDate')]], 
       allocationPercentage: [0, [Validators.required, Validators.min(1), Validators.max(100)]]

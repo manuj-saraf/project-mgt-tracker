@@ -1,15 +1,15 @@
-<div class="approve-task-container">
+<div class="card container approve-task-container">
     <div class="select-member-container">
         <h2>Approve Task </h2>  
         
         <form [formGroup]="memberFormGroup" *ngIf="memberList?.length">
-            <div class="form-group">
-                <label for="member">Select Team Member</label>
-                <select id="member" formControlName="member">
+            <div class="form-group mb-3">
+                <label class="form-label" for="member">Select Team Member</label>
+                <select id="member" class="form-select" formControlName="member">
                     <option value="" disabled selected>Select Member</option>
                     <option [value]="member.id" *ngFor="let member of memberList;trackBy: trackByMemberId" >{{member.name}} - ({{member.id}})</option>
                 </select>
-                <div *ngIf="memberFormGroup.get('member')?.invalid && memberFormGroup.get('member')?.touched" class="error">
+                <div [ngClass]="{'display-invalid-error': memberFormGroup.get('member')?.invalid && memberFormGroup.get('member')?.touched }" class="invalid-feedback">
                     Please select a member
                 </div>
             </div>
@@ -23,14 +23,15 @@
             <ng-container *ngTemplateOutlet="taskDetails; context:{taskList:pendingTasks, showCheckbox: true }">
             </ng-container>
             <!-- Buttons -->
-            <div class="button-group">
-                <button type="button" id="submitBtn" class="submit-button" (click)="updateTaskApproval(taskStatus.Approved)" [disabled]="isActionDisabled()">Accept</button>
-                <button type="button" id="cancelBtn" class="cancel-button" (click)="updateTaskApproval(taskStatus.Rejected)"[disabled]="isActionDisabled()">Reject</button>
+            <div class="button-group maxWid600">
+                <button type="button" id="submitBtn" class="btn btn-primary" (click)="updateTaskApproval(taskStatus.Approved)" [disabled]="isActionDisabled()">Accept</button>
+                <button type="button" id="cancelBtn" class="btn btn-danger" (click)="updateTaskApproval(taskStatus.Rejected)"[disabled]="isActionDisabled()">Reject</button>
             </div>
         </div>
         <br/>
         <!-- Approved / Rejected Task info -->
         <div *ngIf="selectedMember && approvedOrRejectedTasks.length">
+            <h3 class="mt15 textCenter">Tasks Approved / Rejected </h3>
             <ng-container *ngTemplateOutlet="taskDetails; context:{taskList:approvedOrRejectedTasks  , showCheckbox: false }">
             </ng-container>
         </div>
@@ -41,7 +42,7 @@
 <ng-template #taskDetails let-taskList="taskList" let-showCheckbox="showCheckbox">
     
     <div class="tableWrapper">
-        <table class="tasks-table">
+        <table class="table tasks-table">
             <thead>
                 <tr class="bottomBorder">
                     <th></th>
@@ -66,7 +67,7 @@
                     <td class="maxWid200">
                         <div *ngIf="task.approvalHistory?.length; else noApprover">
                             <div *ngFor="let approval of task.approvalHistory">
-                                {{ approval.approverName }} ({{ approval.approvalRole}}) - {{approval.approvalStatus}} on {{ approval.approvalDate | date:'short'}}
+                                {{ approval.approverName }} - {{approval.approvalStatus}} on {{ approval.approvalDate | date:'dd/MM/YYYY'}}
                             </div>
                         </div>
                         <ng-template #noApprover>

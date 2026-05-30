@@ -1,5 +1,5 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="container login-container">
+  <div class="login-card card">
     <!-- Application Title -->
     <h1 class="app-title">Project Management Tracker</h1>
 
@@ -7,22 +7,22 @@
     <p class="project-description">This is a project management tracker. In this the project manager can add team members, add, assign and approve tasks, update allocation. The team member can view the different tasks assigned to them.</p>
 
     <!-- Login Form -->
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <form [formGroup]="loginForm" class="login-form">
       <!-- User ID Field -->
       <div class="form-group">
         <!-- User Type -->
         <label class="form-label">User Type</label> 
-        <div class="radio-group-inline">
-          <label class="radio-label">
-            <input type="radio" formControlName="userType" value="Architect" />
+        <div class="form-check radio-group-inline">
+          <label class="form-check-label radio-label">
+            <input type="radio" class="form-check-input" formControlName="userType" value="Architect" />
             <span>Architect</span>
           </label>
-          <label class="radio-label">
-            <input type="radio" formControlName="userType" value="Manager" />
+          <label class="form-check-label radio-label">
+            <input type="radio" formControlName="userType" class="form-check-input" value="Manager" />
             <span>Manager</span>
           </label>
-          <label class="radio-label">
-            <input type="radio" formControlName="userType" value="Member" />
+          <label class="form-check-label radio-label">
+            <input type="radio" formControlName="userType" class="form-check-input" value="Member" />
             <span>Member</span>
           </label>
         </div>
@@ -34,15 +34,16 @@
             type="text"
             id="userId"
             formControlName="userId"
-            class="form-input"
+            class="form-control form-input"
             placeholder="Enter 6-digit User ID"
             maxlength="6"
             pattern="[0-9]*"
             inputmode="numeric"
+            autocomplete="off"
           >
       </div>
         <!-- Error Messages -->
-        <div class="error" *ngIf="userId?.invalid && userId?.touched">
+        <div class="invalid-feedback " [ngClass]="{'display-invalid-error': userId?.invalid && userId?.touched }">
           <span *ngIf="userId?.errors?.['required']">User ID is required</span>
           <span *ngIf="userId?.errors?.['pattern']">User ID must contain only numbers</span>
           <span *ngIf="userId?.errors?.['maxlength']">User ID cannot exceed 6 digits</span>
@@ -51,7 +52,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button type="submit" class="submit-button" [disabled]="loginForm.invalid">Login</button>
+      <button type="button" (click)="onSubmit()" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
       <div class="note textLeft"> ** Login as Architect / Manager to add Members </div>
     </form>
   </div>
