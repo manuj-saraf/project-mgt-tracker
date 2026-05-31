@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
 import { defaultEmployees } from '../shared/@config/employees';
 import { EmployeeMapper } from '../shared/@mappers/member-mapper';
+import { memberApiData } from '../shared/@mock/members.mock';
 import { AlertService } from '../shared/services/alert.service';
 import { MemberService } from '../shared/services/member.service';
 import { BaseComponent } from './base.component';
@@ -48,6 +48,19 @@ const activatedRouteMock = {
 
     const navLinksForMgr = component.navigationLinks;
     expect(navLinksForMgr.length).toEqual(allNavigationLinks.length -1);
+  });
+
+  
+  
+  it('get Navigation link when logged in as member', () => {
+    const memberData = EmployeeMapper.convertEmployeeToUIModel([memberApiData])[0];
+    component['memberService'].setCurrentUser(memberData)
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.currentUser).toEqual(memberData);
+
+    const navLinksForMgr = component.navigationLinks;
+    expect(navLinksForMgr.length).toEqual(1);
   });
 
   

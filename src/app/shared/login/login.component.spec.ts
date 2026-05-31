@@ -45,13 +45,13 @@ describe('LoginComponent', () => {
 
   it('should validate userId max length', () => {
     const userId = component.loginForm.get('userId');
-    userId?.setValue('1234567');
+    userId?.setValue(1234567);
     expect(userId?.valid).toBeFalsy();
   });
 
   it('should accept valid userId', () => {
     const userId = component.loginForm.get('userId');
-    userId?.setValue('100002');
+    userId?.setValue(100002);
     expect(userId?.valid).toBeTruthy();
   });
 
@@ -80,7 +80,6 @@ describe('LoginComponent', () => {
     component.onSubmit();
     fixture.detectChanges();
     expect(component.onFetchMemberError).toHaveBeenCalled();
-
   });
 
 });

@@ -67,6 +67,14 @@ describe('ApproveTaskComponent', () => {
     expect(component.fetchTasksByEmployeeId).toHaveBeenCalled();
   }));
 
+  
+  it('should show message that no Pending tasks left', fakeAsync(() => {
+    addMultipleMembers();
+    component.fetchTasksByEmployeeId(memberUIData.id);
+    tick();
+    expect(component.errorMsg$.value).toContain('No pending tasks to approve.');
+  }));
+
   it('should toggle Task selection ', () => {
     component.selectedTaskIds.clear(); 
     const ev = {target : {checked: true}} as any;

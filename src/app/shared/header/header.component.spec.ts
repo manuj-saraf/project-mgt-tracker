@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { defaultEmployees } from '../@config/employees';
 import { EmployeeMapper } from '../@mappers/member-mapper';
 import { allNavigationLinks } from 'src/app/base/base.helper';
+import { memberApiData } from '../@mock/members.mock';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -68,6 +69,18 @@ describe('HeaderComponent', () => {
     expect(component.isMenuOpen).toBeFalse();
   });
 
+  
+  it('get Navigation link when logged in as member', () => {
+    const memberData = EmployeeMapper.convertEmployeeToUIModel([memberApiData])[0];
+    component['memberService'].setCurrentUser(memberData)
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.currentUser).toEqual(memberData);
+
+    const navLinksForMgr = component.navigationLinks;
+    expect(navLinksForMgr.length).toEqual(1);
+  });
+  
   it('should logout user', () => {
     component.isMenuOpen = true;
     component.logout();
