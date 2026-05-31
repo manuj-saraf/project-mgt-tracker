@@ -8,7 +8,7 @@ import { MemberService } from '../shared/services/member.service';
 import { BaseComponent } from './base.component';
 import { allNavigationLinks } from './base.helper';
 
-fdescribe('BaseComponent', () => {
+describe('BaseComponent', () => {
   let component: BaseComponent;
   let fixture: ComponentFixture<BaseComponent>;
   const routerSpy = jasmine.createSpyObj('Router',['navigate']);

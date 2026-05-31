@@ -47,17 +47,10 @@ export class UpdateAllocationComponent implements OnInit, OnDestroy {
   }
 
   removeInvalidUserError():void {
-    // keep existing control's error but remove only invalidUserId error
     const memberIdCtrl = this.memberForm.get('member');
     const errors = memberIdCtrl?.errors;
-    if (errors?.['invalidUserId']) {
-      delete errors['invalidUserId'];
-      const remainingErrorKeys = Object.keys(errors);
-      if (remainingErrorKeys.length) {
-        memberIdCtrl?.setErrors(errors);
-      } else {
-        memberIdCtrl?.setErrors(null);
-      }
+    if (errors?.['invalidUserId']) {      
+      memberIdCtrl?.setErrors(null);
     }
   }
 
