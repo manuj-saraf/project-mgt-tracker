@@ -1,15 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { defaultEmployees } from '../@config/employees';
+import { UserRoles } from '../@config/user-roles';
+import { MemberService } from '../services/member.service';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-
+  const routerSpy = jasmine.createSpyObj('Router',['navigate']);
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ LoginComponent ],
-      imports: [ ReactiveFormsModule ]
+      imports: [ ReactiveFormsModule ],
+      providers:[FormBuilder, MemberService, {provide : Router, useValue: routerSpy}]
     })
     .compileComponents();
 
@@ -17,7 +22,7 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+ 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -46,17 +51,36 @@ describe('LoginComponent', () => {
 
   it('should accept valid userId', () => {
     const userId = component.loginForm.get('userId');
-    userId?.setValue('123456');
+    userId?.setValue('100002');
     expect(userId?.valid).toBeTruthy();
   });
 
-  it('should disable submit button when form is invalid', () => {
-    component.loginForm.get('userId')?.setValue('');
-    expect(component.isSubmitDisabled).toBeTruthy();
+  it('should login as Manager ', () => {
+    const userType = component.loginForm.get('userType');
+    const userId = component.loginForm.get('userId');
+    const managerRole = UserRoles.Manager as string;
+    const managerId = defaultEmployees.find(emp => emp.role === UserRoles.Manager)?.id;
+    userType?.setValue(managerRole);
+    fixture.detectChanges();
+    expect(userId?.value).toBe(managerId);
+    spyOn(component,'onFetchMemberSuccess').and.callThrough();
+    component.onSubmit();
+    expect(component.onFetchMemberSuccess).toHaveBeenCalled();
+
   });
 
-  it('should enable submit button when form is valid', () => {
-    component.loginForm.get('userId')?.setValue('123456');
-    expect(component.isSubmitDisabled).toBeFalsy();
+  it('should throw error for invalid member id login ', () => {
+    const userType = component.loginForm.get('userType');
+    const userId = component.loginForm.get('userId');
+    const memberRole = UserRoles.Member as string;
+    userType?.setValue(memberRole);
+    userId?.setValue(999999);
+    fixture.detectChanges();
+    spyOn(component,'onFetchMemberError').and.callThrough();
+    component.onSubmit();
+    fixture.detectChanges();
+    expect(component.onFetchMemberError).toHaveBeenCalled();
+
   });
+
 });

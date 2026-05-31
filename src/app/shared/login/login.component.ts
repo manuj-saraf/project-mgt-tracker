@@ -67,16 +67,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   removeInvalidUserIdError() : void {
-    // keep existing controls but remove only invalidUserId error
     const errors = this.userId?.errors;
     if (errors?.['invalidUserId']) {
       delete errors['invalidUserId'];
-      const remainingErrorKeys = Object.keys(errors);
-      if (remainingErrorKeys.length) {
-        this.userId?.setErrors(errors);
-      } else {
-        this.userId?.setErrors(null);
-      }
+      this.userId?.setErrors(null);
     }
   }
 
