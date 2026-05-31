@@ -24,7 +24,6 @@
             </tr>
         </thead>
         <tbody>
-            <!-- TODO trackBy-->
             <tr *ngFor="let task of taskDetails; let i = index;" class="bottomBorder">
                 <td class="maxWid50">                    
                     <span>{{i+1}}</span>
@@ -34,7 +33,6 @@
                 <td class="maxWid100"> {{task.taskEndDate | date: 'dd/MM/YYYY'}}</td>
                 <td class="maxWid400"> {{task.deliverables}}</td>
                 <td class="maxWid200">
-                    <!-- TODO : trackBy -->
                     <div *ngFor="let approval of task.pendingApprovals; let i = index;">
                         <ul>
                             <li *ngIf="approval.approvalStatus === 'Pending'">{{ approval.name }}  ( {{approval.role }} ) - {{approval.approvalStatus}}</li>

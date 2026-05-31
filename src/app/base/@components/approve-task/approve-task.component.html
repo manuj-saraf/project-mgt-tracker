@@ -54,7 +54,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- TODO trackBy-->
                 <tr *ngFor="let task of taskList; let i = index;" class="bottomBorder">
                     <td class="maxWid50">
                         <input type="checkbox" *ngIf="showCheckbox" (change)="toggleTaskSelection($event, task.id)" />

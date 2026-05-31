@@ -35,7 +35,6 @@ export class AssignTaskComponent implements OnInit, OnDestroy {
   }
 
   onFetchAllMembersSuccess(empList: EmployeeIdentification[]): void {
-    console.log("empList", empList);
     this.memberList = empList;
     this.createForm();
   }
