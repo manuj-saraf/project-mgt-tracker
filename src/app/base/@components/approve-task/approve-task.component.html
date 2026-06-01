@@ -31,7 +31,7 @@
         <br/>
         <!-- Approved / Rejected Task info -->
         <div *ngIf="selectedMember && approvedOrRejectedTasks.length">
-            <h3 class="mt15 textCenter">Tasks Approved / Rejected </h3>
+            <h3 class="mt15 textCenter">Tasks Approved by you But Pending from Others  </h3>
             <ng-container *ngTemplateOutlet="taskDetails; context:{taskList:approvedOrRejectedTasks  , showCheckbox: false }">
             </ng-container>
         </div>
