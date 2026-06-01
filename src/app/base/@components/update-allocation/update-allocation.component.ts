@@ -106,6 +106,7 @@ export class UpdateAllocationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
+    this.alertService.hideAlert();
     this.destroy$.next();
     this.destroy$.complete();
   }

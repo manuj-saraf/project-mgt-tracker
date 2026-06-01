@@ -30,7 +30,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
   private createForm(): void {
     this.addMemberForm = this.fb.group({
       role: [{ value: UserRoles.Member, disabled: true }],
-      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+(?:[.'-][A-Za-z]+)*$/)]],
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/)]],
       experience: [0, [Validators.required, Validators.min(4), Validators.max(40)]],
       skills: [[], [this.atLeastThreeSkillsValidator]],
       profileDescription: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
